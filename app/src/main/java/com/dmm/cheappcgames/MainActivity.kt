@@ -32,12 +32,13 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.fragmentsOffers))
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.fragmentsOffers, R.id.fragmentSearch))
 
         binding.materialToolbar.setupWithNavController(navController, appBarConfiguration)
+        binding.bottomNavigation.setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp()
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }

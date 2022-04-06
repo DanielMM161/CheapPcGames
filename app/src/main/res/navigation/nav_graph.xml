@@ -19,4 +19,8 @@
             android:id="@+id/action_fragmentFilter_to_fragmentsOffers"
             app:destination="@id/fragmentsOffers" />
     </fragment>
+    <fragment
+        android:id="@+id/fragmentSearch"
+        android:name="com.dmm.cheappcgames.fragments.FragmentSearch"
+        android:label="FragmentSearch" />
 </navigation>
