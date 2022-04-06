@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/fragmentsOffers">
+    <fragment
+        android:id="@+id/fragmentsOffers"
+        android:name="com.dmm.cheappcgames.fragments.FragmentsOffers"
+        android:label="FragmentsOffers" >
+        <action
+            android:id="@+id/action_fragmentsOffers_to_fragmentFilter"
+            app:destination="@id/fragmentFilter" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentFilter"
+        android:name="com.dmm.cheappcgames.fragments.FragmentFilter"
+        android:label="FragmentFilter" >
+        <action
+            android:id="@+id/action_fragmentFilter_to_fragmentsOffers"
+            app:destination="@id/fragmentsOffers" />
+    </fragment>
+</navigation>

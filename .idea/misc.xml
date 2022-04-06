@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Documentos/Programacion/Proyectos/PersonalProject/CheapPcGames/app/src/main/res/drawable/loading_img.xml" value="0.142" />
+        <entry key="..\:/Documentos/Programacion/Proyectos/PersonalProject/CheapPcGames/app/src/main/res/layout/activity_main.xml" value="0.340625" />
+        <entry key="..\:/Documentos/Programacion/Proyectos/PersonalProject/CheapPcGames/app/src/main/res/layout/fragment_filter.xml" value="0.3546875" />
+        <entry key="..\:/Documentos/Programacion/Proyectos/PersonalProject/CheapPcGames/app/src/main/res/layout/fragment_filter_dialog.xml" value="0.3546875" />
+        <entry key="..\:/Documentos/Programacion/Proyectos/PersonalProject/CheapPcGames/app/src/main/res/layout/fragment_offers.xml" value="0.21920289855072464" />
+        <entry key="..\:/Documentos/Programacion/Proyectos/PersonalProject/CheapPcGames/app/src/main/res/layout/fragment_offers_list.xml" value="0.3546875" />
+        <entry key="..\:/Documentos/Programacion/Proyectos/PersonalProject/CheapPcGames/app/src/main/res/layout/fragment_search.xml" value="0.22327898550724637" />
+        <entry key="..\:/Documentos/Programacion/Proyectos/PersonalProject/CheapPcGames/app/src/main/res/layout/fragment_show_offers_dialog.xml" value="0.3546875" />
+        <entry key="..\:/Documentos/Programacion/Proyectos/PersonalProject/CheapPcGames/app/src/main/res/layout/item_distributor.xml" value="0.25326370757180156" />
+        <entry key="..\:/Documentos/Programacion/Proyectos/PersonalProject/CheapPcGames/app/src/main/res/layout/item_offers.xml" value="0.3546875" />
+        <entry key="..\:/Documentos/Programacion/Proyectos/PersonalProject/CheapPcGames/app/src/main/res/layout/items_distributor.xml" value="0.3546875" />
+        <entry key="..\:/Documentos/Programacion/Proyectos/PersonalProject/CheapPcGames/app/src/main/res/menu/toolbar_menu.xml" value="0.3546875" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
