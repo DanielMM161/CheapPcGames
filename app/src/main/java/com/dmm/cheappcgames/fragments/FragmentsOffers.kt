@@ -39,7 +39,6 @@ class FragmentsOffers() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentOffersBinding.bind(view)
         viewModel = (activity as MainActivity).viewModel
-        Log.e("Fragment Offers", "  ---------------------- onViewCreated  ----------------------")
 
         observeGamesDistributor()
         observeOffers()
@@ -90,7 +89,6 @@ class FragmentsOffers() : Fragment() {
     }
 
     fun setUpRecyclerView() = binding.rvOffers.apply {
-        Log.e("Fragment Offers", "  ---------------------- setUpRecyclerView  ----------------------")
         val gamesDistributor = viewModel.gamesDistributor.value?.data!!
         offersAdapter = OffersAdapter(gamesDistributor)
         adapter = offersAdapter
@@ -98,10 +96,20 @@ class FragmentsOffers() : Fragment() {
         addOnScrollListener(this@FragmentsOffers.scrollListener)
     }
 
-    fun showFilter() {
+    private fun showFilter() {
         findNavController().navigate(R.id.action_fragmentsOffers_to_fragmentFilter)
     }
 
+
+    private fun hiddenProgressBar() {
+        binding.paginationProgressbar.visibility = View.GONE
+        isLoading = false
+    }
+
+    private fun showProgressBar() {
+        binding.paginationProgressbar.visibility = View.VISIBLE
+        isLoading = true
+    }
     fun showDialog() {
         var dialog = FragmentShowOfferDialog()
         dialog.show(parentFragmentManager, "filterDialog")
@@ -112,6 +120,7 @@ class FragmentsOffers() : Fragment() {
             offersAdapter.submitList(offers.toList())
             val totalPages = offers.size / QUERY_PAGE_SIZE + 2
             isLastPage = viewModel.offersPage == totalPages
+            hiddenProgressBar()
         }
     }
 
@@ -122,10 +131,10 @@ class FragmentsOffers() : Fragment() {
                     responseSuccess(response)
                 }
                 is Resource.Loading -> {
-
+                    showProgressBar()
                 }
                 is Resource.Error -> {
-
+                    hiddenProgressBar()
                 }
             }
         })
@@ -138,10 +147,10 @@ class FragmentsOffers() : Fragment() {
                     responseSuccess(response)
                 }
                 is Resource.Loading -> {
-
+                    showProgressBar()
                 }
                 is Resource.Error -> {
-
+                    hiddenProgressBar()
                 }
             }
         })
@@ -152,13 +161,14 @@ class FragmentsOffers() : Fragment() {
             when(response) {
                 is Resource.Success -> {
                     setUpRecyclerView()
+                    hiddenProgressBar()
                     viewModel.getOffers()
                 }
                 is Resource.Loading -> {
-
+                    showProgressBar()
                 }
                 is Resource.Error -> {
-
+                    hiddenProgressBar()
                 }
             }
         })

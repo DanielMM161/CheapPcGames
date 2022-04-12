@@ -60,10 +60,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/name"
-                    android:layout_toStartOf="@+id/discount"
                     android:layout_marginEnd="8dp"
+                    android:layout_toStartOf="@+id/discount"
                     android:text="@{offer.normalPrice}"
-                    tools:text="15$"/>
+                    tools:text="15$" />
 
                 <TextView
                     android:id="@+id/discount_price"
@@ -72,7 +72,6 @@
                     android:layout_below="@+id/normal_price"
                     android:layout_toStartOf="@+id/discount"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginTop="8dp"
                     android:text="@{offer.salePrice}"
                     tools:text="8$" />
 

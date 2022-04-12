@@ -30,6 +30,17 @@
             android:contentDescription="@string/filter"
             android:elevation="10dp"
             android:src="@drawable/ic_baseline_filter_alt_24" />
+        
+        <ProgressBar
+            android:id="@+id/paginationProgressbar"
+            style="?attr/progressBarStyle"
+            android:background="@color/transparent"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
 
