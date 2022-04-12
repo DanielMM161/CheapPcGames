@@ -18,6 +18,16 @@ interface OffersApi {
         storeId: String ?= null
     ) : Response<List<Offer>>
 
+    @GET("deals")
+    suspend fun getSearchDeals(
+        @Query("pageNumber")
+        pageNumber: Int = 0,
+        @Query("storeID")
+        storeId: String ?= null,
+        @Query("title")
+        title: String ?= null
+    ) : Response<List<Offer>>
+
     @GET("stores")
     suspend fun getSotres() : Response<List<StoreItem>>
 }

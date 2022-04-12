@@ -7,13 +7,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dmm.cheappcgames.data.Offer
+import com.dmm.cheappcgames.data.StoreItem
 import com.dmm.cheappcgames.databinding.ItemOffersBinding
+import com.dmm.cheappcgames.ui.OffersViewModel
 
-class OffersAdapter() : ListAdapter<Offer, OffersAdapter.OfferViewHolder>(diffCallback) {
+class OffersAdapter(val gamesDistributor: List<StoreItem>) : ListAdapter<Offer, OffersAdapter.OfferViewHolder>(diffCallback) {
 
     class OfferViewHolder(private val binding: ItemOffersBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(offer: Offer) {
+        fun bind(offer: Offer, gamesDistributor: List<StoreItem>) {
             binding.offer = offer
+            binding.stores = gamesDistributor
         }
     }
 
@@ -36,7 +39,7 @@ class OffersAdapter() : ListAdapter<Offer, OffersAdapter.OfferViewHolder>(diffCa
 
     override fun onBindViewHolder(holder: OfferViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, gamesDistributor)
     }
 
 }

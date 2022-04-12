@@ -2,6 +2,7 @@ package com.dmm.cheappcgames.ui
 
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,21 +18,27 @@ class OffersViewModel(
     private val repository: OffersRepository
 ) : ViewModel() {
 
-    val offersGame: MutableLiveData<Resource<List<Offer>>> = MutableLiveData()
+    val offersGame: MutableLiveData<Resource<List<Offer>>?> = MutableLiveData()
     var offersPage = 1
     var offersGameResponse: MutableList<Offer>? = null
 
-    var storesGame: List<StoreItem> = emptyList()
+    val searchOffers: MutableLiveData<Resource<List<Offer>>> = MutableLiveData()
+    var searchPage = 0
+    var searchOffersResponse: MutableList<Offer>? = null
+
+    val gamesDistributor: MutableLiveData<Resource<List<StoreItem>>> = MutableLiveData()
+
     var storesSelectedList: MutableList<String> = ArrayList()
+
+    var searchText: String = ""
 
     init {
         getStores()
-        getOffers()
     }
 
     fun getOffers() = viewModelScope.launch {
         offersGame.postValue(Resource.Loading())
-        if(areThereStoresSeleted()) {
+        if(isStoresSeleted()) {
             var storesSelected = ""
             storesSelectedList.forEachIndexed { index, element -> if(index == storesSelectedList.size - 1) storesSelected = storesSelected+element else storesSelected = "${storesSelected+element}," }
             val response = repository.getOffers(offersPage, storesSelected)
@@ -42,15 +49,23 @@ class OffersViewModel(
         }
     }
 
-    fun getStores() = viewModelScope.launch {
-        val response = repository.getSotres()
-        if(response.isSuccessful) {
-            response.body()?.let { result ->
-                storesGame = result
-                repository.insertStores(result)
-            }
-
+    fun getSearchOffers(title: String) = viewModelScope.launch {
+        searchOffers.postValue(Resource.Loading())
+        if(isStoresSeleted()) {
+            var storesSelected = ""
+            storesSelectedList.forEachIndexed { index, element -> if(index == storesSelectedList.size - 1) storesSelected = storesSelected+element else storesSelected = "${storesSelected+element}," }
+            val response = repository.getSearchOffers(searchPage, storesSelected, title)
+            searchOffers.postValue(handleSearchResponse(response))
+        } else {
+            val response = repository.getSearchOffers(searchPage, title = title)
+            searchOffers.postValue(handleSearchResponse(response))
         }
+    }
+
+    fun getStores() = viewModelScope.launch {
+        gamesDistributor.postValue(Resource.Loading())
+        val response = repository.getSotres()
+        gamesDistributor.postValue(handleGamesDistributor(response))
     }
 
     private fun handleOffersResponse(response: Response<List<Offer>>) : Resource<List<Offer>> {
@@ -70,22 +85,44 @@ class OffersViewModel(
         return Resource.Error(response.message())
     }
 
-    private fun handleStoreResponse(response: Response<List<StoreItem>>) : Resource<List<StoreItem>> {
+    private fun handleSearchResponse(response: Response<List<Offer>>) : Resource<List<Offer>> {
         if(response.isSuccessful) {
             response.body()?.let { result ->
-                return Resource.Success(result)
+                searchPage++
+                if(searchOffersResponse == null) {
+                    searchOffersResponse = result.toMutableList()
+                } else {
+                    val oldGames = searchOffersResponse
+                    val newGames = result
+                    oldGames?.addAll(newGames)
+                }
+                return Resource.Success(searchOffersResponse ?: result)
             }
         }
         return Resource.Error(response.message())
     }
 
-    private fun areThereStoresSeleted(): Boolean {
+    private fun handleGamesDistributor(response: Response<List<StoreItem>>) : Resource<List<StoreItem>> {
+        if(response.isSuccessful) {
+            response.body()?.let { result ->
+                return Resource.Success(result.toMutableList())
+            }
+        }
+        return Resource.Error(response.message())
+    }
+
+    private fun isStoresSeleted(): Boolean {
         return storesSelectedList.size != 0
     }
 
-    fun resetResponse() {
+    fun resetResponseOffers() {
         offersGameResponse = null
         offersPage = 1
+    }
+
+    fun resetResponseSearch() {
+        searchOffersResponse = null
+        searchPage = 0
     }
 
     fun handleOnClickMaterial(view: View, storeItem: StoreItem) {

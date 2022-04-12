@@ -1,9 +1,8 @@
 package com.dmm.cheappcgames.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import android.widget.AbsListView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -13,10 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dmm.cheappcgames.MainActivity
 import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.OffersAdapter
+import com.dmm.cheappcgames.data.Offer
 import com.dmm.cheappcgames.databinding.FragmentOffersBinding
 import com.dmm.cheappcgames.resource.Resource
 import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.utils.Constants.Companion.QUERY_PAGE_SIZE
+
 
 class FragmentsOffers() : Fragment() {
 
@@ -37,27 +38,12 @@ class FragmentsOffers() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentOffersBinding.bind(view)
-        setUpRecyclerView()
-
         viewModel = (activity as MainActivity).viewModel
+        Log.e("Fragment Offers", "  ---------------------- onViewCreated  ----------------------")
 
-        viewModel.offersGame.observe(viewLifecycleOwner, Observer { response ->
-            when(response) {
-                is Resource.Success -> {
-                    response.data?.let { offers ->
-                        offersAdapter.submitList(offers.toList())
-                        val totalPages = offers.size / QUERY_PAGE_SIZE + 2
-                        isLastPage = viewModel.offersPage == totalPages
-                    }
-                }
-                is Resource.Loading -> {
-
-                }
-                is Resource.Error -> {
-
-                }
-            }
-        })
+        observeGamesDistributor()
+        observeOffers()
+        observeSearch()
 
         binding.filter.setOnClickListener {
             showFilter()
@@ -83,7 +69,11 @@ class FragmentsOffers() : Fragment() {
             val isTotalMoreThanVisible = totalItem >= QUERY_PAGE_SIZE
             val shouldPaginate = isNotLoadingAndNotLastPage && isLastItem && isNotAtBegining && isTotalMoreThanVisible && isScrolling
             if(shouldPaginate) {
-                viewModel.getOffers()
+                if(viewModel.searchText.isNotBlank()) {
+                    viewModel.getSearchOffers(viewModel.searchText)
+                } else {
+                    viewModel.getOffers()
+                }
                 isScrolling = false
             } else {
                 binding.rvOffers.setPadding(0, 0, 0, 0)
@@ -100,7 +90,9 @@ class FragmentsOffers() : Fragment() {
     }
 
     fun setUpRecyclerView() = binding.rvOffers.apply {
-        offersAdapter = OffersAdapter()
+        Log.e("Fragment Offers", "  ---------------------- setUpRecyclerView  ----------------------")
+        val gamesDistributor = viewModel.gamesDistributor.value?.data!!
+        offersAdapter = OffersAdapter(gamesDistributor)
         adapter = offersAdapter
         layoutManager = LinearLayoutManager(requireContext())
         addOnScrollListener(this@FragmentsOffers.scrollListener)
@@ -114,4 +106,62 @@ class FragmentsOffers() : Fragment() {
         var dialog = FragmentShowOfferDialog()
         dialog.show(parentFragmentManager, "filterDialog")
     }
+
+    private fun responseSuccess(response: Resource<List<Offer>>) {
+        response.data?.let { offers ->
+            offersAdapter.submitList(offers.toList())
+            val totalPages = offers.size / QUERY_PAGE_SIZE + 2
+            isLastPage = viewModel.offersPage == totalPages
+        }
+    }
+
+    private fun observeOffers() {
+        viewModel.offersGame.observe(viewLifecycleOwner, Observer { response ->
+            when(response) {
+                is Resource.Success -> {
+                    responseSuccess(response)
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Error -> {
+
+                }
+            }
+        })
+    }
+
+    private fun observeSearch() {
+        viewModel.searchOffers.observe(viewLifecycleOwner, Observer { response ->
+            when(response) {
+                is Resource.Success -> {
+                    responseSuccess(response)
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Error -> {
+
+                }
+            }
+        })
+    }
+
+    private fun observeGamesDistributor() {
+        viewModel.gamesDistributor.observe(viewLifecycleOwner, Observer { response ->
+            when(response) {
+                is Resource.Success -> {
+                    setUpRecyclerView()
+                    viewModel.getOffers()
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Error -> {
+
+                }
+            }
+        })
+    }
+
 }
