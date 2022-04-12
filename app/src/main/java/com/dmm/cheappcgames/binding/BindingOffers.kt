@@ -1,6 +1,7 @@
 package com.dmm.cheappcgames.binding
 
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import coil.load
@@ -8,6 +9,7 @@ import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.data.StoreItem
 import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.utils.Constants.Companion.BASE_URL_LOGO
+import kotlin.math.truncate
 
 object BindingOffers {
 
@@ -38,6 +40,13 @@ object BindingOffers {
             }
 
         }
+    }
+
+    @BindingAdapter("textSaving")
+    @JvmStatic
+    fun bindSaving(textView: TextView, text: String) {
+        var savings  = truncate(text.toDouble()).toInt()
+        textView.text = savings.toString() + "%"
     }
 
 }
