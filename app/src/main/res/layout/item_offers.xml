@@ -17,8 +17,9 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp">
 
@@ -34,17 +35,15 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_gravity="end"
-            android:layout_marginStart="8dp"
-            android:orientation="vertical">
+            android:layout_marginStart="8dp">
 
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:maxLines="2"
-                android:text="@{offer.title}"
-                tools:text="Name"/>
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:text="@{offer.title}"
+                    tools:text="Name" />
 
                 <ImageView
                     android:id="@+id/logo"
@@ -77,16 +76,16 @@
 
                 <TextView
                     android:id="@+id/discount"
+                    textSaving="@{offer.savings}"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginEnd="8dp"
-                    textSaving="@{offer.savings}"
-                    android:textAlignment="center"
+                    android:background="?attr/colorPrimary"
                     android:gravity="center"
-                    tools:text="91%"
-                    android:background="?attr/colorPrimary" />
+                    android:textAlignment="center"
+                    tools:text="91%" />
 
         </RelativeLayout>
     </LinearLayout>

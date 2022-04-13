@@ -7,6 +7,7 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dmm.cheappcgames.data.GameItem
 import com.dmm.cheappcgames.data.Offer
 import com.dmm.cheappcgames.data.StoreItem
 import com.dmm.cheappcgames.resource.Resource
@@ -28,6 +29,8 @@ class OffersViewModel(
 
     val gamesDistributor: MutableLiveData<Resource<List<StoreItem>>> = MutableLiveData()
 
+    val gameId: MutableLiveData<Resource<GameItem>> = MutableLiveData()
+
     var storesSelectedList: MutableList<String> = ArrayList()
 
     var searchText: String = ""
@@ -38,7 +41,7 @@ class OffersViewModel(
 
     fun getOffers() = viewModelScope.launch {
         offersGame.postValue(Resource.Loading())
-        if(isStoresSeleted()) {
+        if(isStoresSelected()) {
             var storesSelected = ""
             storesSelectedList.forEachIndexed { index, element -> if(index == storesSelectedList.size - 1) storesSelected = storesSelected+element else storesSelected = "${storesSelected+element}," }
             val response = repository.getOffers(offersPage, storesSelected)
@@ -51,7 +54,7 @@ class OffersViewModel(
 
     fun getSearchOffers(title: String) = viewModelScope.launch {
         searchOffers.postValue(Resource.Loading())
-        if(isStoresSeleted()) {
+        if(isStoresSelected()) {
             var storesSelected = ""
             storesSelectedList.forEachIndexed { index, element -> if(index == storesSelectedList.size - 1) storesSelected = storesSelected+element else storesSelected = "${storesSelected+element}," }
             val response = repository.getSearchOffers(searchPage, storesSelected, title)
@@ -66,6 +69,12 @@ class OffersViewModel(
         gamesDistributor.postValue(Resource.Loading())
         val response = repository.getSotres()
         gamesDistributor.postValue(handleGamesDistributor(response))
+    }
+
+    fun getGameById(id: Int) = viewModelScope.launch {
+        gameId.postValue(Resource.Loading())
+        val response = repository.getGameById(id)
+        gameId.postValue(handleGameById(response))
     }
 
     private fun handleOffersResponse(response: Response<List<Offer>>) : Resource<List<Offer>> {
@@ -111,7 +120,16 @@ class OffersViewModel(
         return Resource.Error(response.message())
     }
 
-    private fun isStoresSeleted(): Boolean {
+    private fun handleGameById(response: Response<GameItem>) : Resource<GameItem> {
+        if(response.isSuccessful) {
+            response.body()?.let { result ->
+                return Resource.Success(result)
+            }
+        }
+        return Resource.Error(response.message())
+    }
+
+    private fun isStoresSelected(): Boolean {
         return storesSelectedList.size != 0
     }
 

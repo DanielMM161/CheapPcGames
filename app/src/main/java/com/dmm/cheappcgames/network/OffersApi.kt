@@ -1,5 +1,6 @@
 package com.dmm.cheappcgames.network
 
+import com.dmm.cheappcgames.data.GameItem
 import com.dmm.cheappcgames.data.Offer
 import com.dmm.cheappcgames.data.StoreItem
 import retrofit2.Response
@@ -27,6 +28,12 @@ interface OffersApi {
         @Query("title")
         title: String ?= null
     ) : Response<List<Offer>>
+
+    @GET("games")
+    suspend fun getGameById(
+        @Query("id")
+        id: Int = 1
+    ) : Response<GameItem>
 
     @GET("stores")
     suspend fun getSotres() : Response<List<StoreItem>>

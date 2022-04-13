@@ -14,6 +14,9 @@ class OffersRepository(
     suspend fun getSearchOffers(pageNumb: Int, storeId: String ?= null, title: String ?= null) =
         RetrofitInstance.api.getSearchDeals(pageNumb, storeId, title)
 
+    suspend fun getGameById(id: Int) =
+        RetrofitInstance.api.getGameById(id)
+
     suspend fun getSotres() =
         RetrofitInstance.api.getSotres()
 

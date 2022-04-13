@@ -1,6 +1,7 @@
 package com.dmm.cheappcgames.adapters
 
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -37,9 +38,20 @@ class OffersAdapter(val gamesDistributor: List<StoreItem>) : ListAdapter<Offer, 
         }
     }
 
+    private var onItemClickListener: ((Offer) -> Unit)? = null
+
     override fun onBindViewHolder(holder: OfferViewHolder, position: Int) {
         val item = getItem(position)
+        holder.itemView.apply {
+           setOnClickListener {
+               onItemClickListener?.let { it(item) }
+           }
+        }
         holder.bind(item, gamesDistributor)
+    }
+
+    fun setOnItemClickListener(listener: (Offer) -> Unit) {
+        onItemClickListener = listener
     }
 
 }

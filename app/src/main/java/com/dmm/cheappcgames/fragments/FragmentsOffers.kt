@@ -43,6 +43,7 @@ class FragmentsOffers() : Fragment() {
         observeGamesDistributor()
         observeOffers()
         observeSearch()
+        observeGameId()
 
         binding.filter.setOnClickListener {
             showFilter()
@@ -88,18 +89,20 @@ class FragmentsOffers() : Fragment() {
         }
     }
 
-    fun setUpRecyclerView() = binding.rvOffers.apply {
-        val gamesDistributor = viewModel.gamesDistributor.value?.data!!
-        offersAdapter = OffersAdapter(gamesDistributor)
-        adapter = offersAdapter
-        layoutManager = LinearLayoutManager(requireContext())
-        addOnScrollListener(this@FragmentsOffers.scrollListener)
+    fun setUpRecyclerView() {
+        binding.rvOffers.apply {
+            val gamesDistributor = viewModel.gamesDistributor.value?.data!!
+            offersAdapter = OffersAdapter(gamesDistributor)
+            adapter = offersAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+            addOnScrollListener(this@FragmentsOffers.scrollListener)
+        }
+        itemClickListener()
     }
 
     private fun showFilter() {
         findNavController().navigate(R.id.action_fragmentsOffers_to_fragmentFilter)
     }
-
 
     private fun hiddenProgressBar() {
         binding.paginationProgressbar.visibility = View.GONE
@@ -110,9 +113,10 @@ class FragmentsOffers() : Fragment() {
         binding.paginationProgressbar.visibility = View.VISIBLE
         isLoading = true
     }
+
     fun showDialog() {
         var dialog = FragmentShowOfferDialog()
-        dialog.show(parentFragmentManager, "filterDialog")
+        dialog.show(parentFragmentManager, "showOffer")
     }
 
     private fun responseSuccess(response: Resource<List<Offer>>) {
@@ -161,7 +165,6 @@ class FragmentsOffers() : Fragment() {
             when(response) {
                 is Resource.Success -> {
                     setUpRecyclerView()
-                    hiddenProgressBar()
                     viewModel.getOffers()
                 }
                 is Resource.Loading -> {
@@ -172,6 +175,30 @@ class FragmentsOffers() : Fragment() {
                 }
             }
         })
+    }
+
+    private fun observeGameId() {
+        viewModel.gameId.observe(viewLifecycleOwner, Observer { response ->
+            when(response) {
+                is Resource.Success -> {
+                    showDialog()
+                    hiddenProgressBar()
+                }
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+                is Resource.Error -> {
+                    hiddenProgressBar()
+                }
+            }
+        })
+    }
+
+    private fun itemClickListener() {
+        offersAdapter.setOnItemClickListener { it ->
+            val id = it.gameID.toInt()
+            viewModel.getGameById(id)
+        }
     }
 
 }

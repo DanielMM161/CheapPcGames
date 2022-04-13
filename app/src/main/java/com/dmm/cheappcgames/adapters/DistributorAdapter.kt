@@ -1,13 +1,11 @@
 package com.dmm.cheappcgames.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
-import com.dmm.cheappcgames.R
-
 import com.dmm.cheappcgames.data.StoreItem
 import com.dmm.cheappcgames.databinding.ItemDistributorBinding
 import com.dmm.cheappcgames.ui.OffersViewModel
@@ -39,7 +37,6 @@ class DistributorAdapter(context: Context, val stores: List<StoreItem>, val view
         if(viewModel.storesSelectedList.contains(item.storeID.toString())) {
             binding.button.isSelected = true
         }
-
         return binding.root
     }
 
