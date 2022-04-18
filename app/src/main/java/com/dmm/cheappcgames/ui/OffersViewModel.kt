@@ -78,6 +78,10 @@ class OffersViewModel(
         repository.insertGame(game)
     }
 
+    fun deleteGame(game: Offer) = viewModelScope.launch {
+        repository.deleteGame(game)
+    }
+
     fun getFavoritesGames() = repository.getFavoritesOffers()
 
     private fun handleOffersResponse(response: Response<List<Offer>>) : Resource<List<Offer>> {

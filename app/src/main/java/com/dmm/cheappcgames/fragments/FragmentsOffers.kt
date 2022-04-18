@@ -122,7 +122,7 @@ class FragmentsOffers() : Fragment() {
 
     private fun responseSuccess(response: Resource<List<Offer>>) {
         response.data?.let { offers ->
-            offersAdapter.submitList(offers.toList())
+            offersAdapter.differ.submitList(offers.toList())
             val totalPages = offers.size / QUERY_PAGE_SIZE + 2
             isLastPage = viewModel.offersPage == totalPages
             hiddenProgressBar()

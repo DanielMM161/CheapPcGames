@@ -15,4 +15,8 @@
     <string name="all_offers">All offers</string>
     <string name="search_offers">Search offers</string>
     <string name="logostore">logo store of the game</string>
+
+    <!-- SnackBar Message-->
+    <string name="delete_game">The video game %s was delete</string>
+    <string name="undo">Undo</string>
 </resources>

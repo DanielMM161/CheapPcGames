@@ -21,5 +21,7 @@ class OffersRepository(
 
     suspend fun insertGame(game: Offer) = db.storeDao().insertGame(game)
 
+    suspend fun deleteGame(game: Offer) = db.storeDao().deleteGame(game)
+
     fun getFavoritesOffers() = db.storeDao().getFavoritesOffers()
 }

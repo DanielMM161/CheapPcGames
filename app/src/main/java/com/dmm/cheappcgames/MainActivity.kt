@@ -16,6 +16,7 @@ import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.ui.ViewModelFactory
 import com.dmm.cheappcgames.utils.Constants
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var searchView: SearchView
     private lateinit var menuItem: MenuItem
     private lateinit var materiaToolbar: MaterialToolbar
+    lateinit var bottomNavigation: BottomNavigationView
     var onNextClicked: () -> Unit = {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setupWithNavController(navController)
 
 
+        bottomNavigation = binding.bottomNavigation
         materiaToolbar = binding.materialToolbar
         menuItem = materiaToolbar.menu.findItem(R.id.app_bar_search)
         menuItem.setVisible(true)
