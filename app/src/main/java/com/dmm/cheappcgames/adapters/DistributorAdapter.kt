@@ -1,7 +1,5 @@
 package com.dmm.cheappcgames.adapters
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +8,7 @@ import com.dmm.cheappcgames.data.StoreItem
 import com.dmm.cheappcgames.databinding.ItemDistributorBinding
 import com.dmm.cheappcgames.ui.OffersViewModel
 
-class DistributorAdapter(context: Context, val stores: List<StoreItem>, val viewModel: OffersViewModel) : BaseAdapter() {
+class DistributorAdapter(val stores: List<StoreItem>, val viewModel: OffersViewModel) : BaseAdapter() {
     override fun getCount(): Int {
         return stores.size
     }

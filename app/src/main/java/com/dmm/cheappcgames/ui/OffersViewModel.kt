@@ -1,8 +1,5 @@
 package com.dmm.cheappcgames.ui
 
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,7 +26,7 @@ class OffersViewModel(
 
     val gamesDistributor: MutableLiveData<Resource<List<StoreItem>>> = MutableLiveData()
 
-    val gameId: MutableLiveData<Resource<GameItem>> = MutableLiveData()
+    var gameId: MutableLiveData<Resource<GameItem>> = MutableLiveData()
 
     var storesSelectedList: MutableList<String> = ArrayList()
 
@@ -74,8 +71,14 @@ class OffersViewModel(
     fun getGameById(id: Int) = viewModelScope.launch {
         gameId.postValue(Resource.Loading())
         val response = repository.getGameById(id)
-        gameId.postValue(handleGameById(response))
+        gameId.postValue(handleGameById(response, id.toString()))
     }
+
+    fun saveGame(game: Offer) = viewModelScope.launch {
+        repository.insertGame(game)
+    }
+
+    fun getFavoritesGames() = repository.getFavoritesOffers()
 
     private fun handleOffersResponse(response: Response<List<Offer>>) : Resource<List<Offer>> {
         if(response.isSuccessful) {
@@ -120,10 +123,10 @@ class OffersViewModel(
         return Resource.Error(response.message())
     }
 
-    private fun handleGameById(response: Response<GameItem>) : Resource<GameItem> {
+    private fun handleGameById(response: Response<GameItem>, id: String) : Resource<GameItem> {
         if(response.isSuccessful) {
             response.body()?.let { result ->
-                return Resource.Success(result)
+                return Resource.Success(result.copy(gameId = id))
             }
         }
         return Resource.Error(response.message())
@@ -136,6 +139,10 @@ class OffersViewModel(
     fun resetResponseOffers() {
         offersGameResponse = null
         offersPage = 1
+    }
+
+    fun resetGameById() {
+        gameId =  MutableLiveData()
     }
 
     fun resetResponseSearch() {
