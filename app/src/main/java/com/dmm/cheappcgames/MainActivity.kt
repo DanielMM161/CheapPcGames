@@ -74,9 +74,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.fragmentFavorites -> {
                     setTitleMateriaToolbar(R.string.fragment_favorites)
                 }
-                else -> {
-                    menuItem.setVisible(true)
-                }
+                else -> menuItem.setVisible(true)
             }
         }
     }

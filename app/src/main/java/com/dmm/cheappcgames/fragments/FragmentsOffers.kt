@@ -1,6 +1,7 @@
 package com.dmm.cheappcgames.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.AbsListView
 import androidx.fragment.app.Fragment
@@ -11,12 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dmm.cheappcgames.MainActivity
 import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.OffersAdapter
-import com.dmm.cheappcgames.data.GameItem
 import com.dmm.cheappcgames.data.Offer
 import com.dmm.cheappcgames.databinding.FragmentOffersBinding
 import com.dmm.cheappcgames.resource.Resource
 import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.utils.Constants.Companion.QUERY_PAGE_SIZE
+
 
 class FragmentsOffers() : Fragment() {
 
@@ -42,7 +43,6 @@ class FragmentsOffers() : Fragment() {
         observeGamesDistributor()
         observeOffers()
         observeSearch()
-
         observeGameId()
 
         binding.filter.setOnClickListener {
@@ -114,10 +114,9 @@ class FragmentsOffers() : Fragment() {
         isLoading = true
     }
 
-    fun showDialog(gameItem: GameItem) {
-        val dialog = FragmentShowOfferDialog(gameItem)
+    fun showDialog() {
+        var dialog = FragmentShowOfferDialog()
         dialog.show(parentFragmentManager, "showOffer")
-        viewModel.gameId.removeObserver {}
     }
 
     private fun responseSuccess(response: Resource<List<Offer>>) {
@@ -133,7 +132,6 @@ class FragmentsOffers() : Fragment() {
         viewModel.offersGame.observe(viewLifecycleOwner, Observer { response ->
             when(response) {
                 is Resource.Success -> {
-                    setUpRecyclerView()
                     responseSuccess(response)
                 }
                 is Resource.Loading -> {
@@ -142,7 +140,6 @@ class FragmentsOffers() : Fragment() {
                 is Resource.Error -> {
                     hiddenProgressBar()
                 }
-                else -> { hiddenProgressBar() }
             }
         })
     }
@@ -159,7 +156,6 @@ class FragmentsOffers() : Fragment() {
                 is Resource.Error -> {
                     hiddenProgressBar()
                 }
-                else -> { hiddenProgressBar() }
             }
         })
     }
@@ -168,6 +164,7 @@ class FragmentsOffers() : Fragment() {
         viewModel.gamesDistributor.observe(viewLifecycleOwner, Observer { response ->
             when(response) {
                 is Resource.Success -> {
+                    setUpRecyclerView()
                     viewModel.getOffers()
                 }
                 is Resource.Loading -> {
@@ -176,7 +173,6 @@ class FragmentsOffers() : Fragment() {
                 is Resource.Error -> {
                     hiddenProgressBar()
                 }
-                else -> { hiddenProgressBar() }
             }
         })
     }
@@ -185,10 +181,8 @@ class FragmentsOffers() : Fragment() {
         viewModel.gameId.observe(viewLifecycleOwner, Observer { response ->
             when(response) {
                 is Resource.Success -> {
-                    response.data.let { it ->
-                        showDialog(it!!)
-                        hiddenProgressBar()
-                    }
+                    showDialog()
+                    hiddenProgressBar()
                 }
                 is Resource.Loading -> {
                     showProgressBar()
@@ -196,7 +190,6 @@ class FragmentsOffers() : Fragment() {
                 is Resource.Error -> {
                     hiddenProgressBar()
                 }
-                else -> { hiddenProgressBar() }
             }
         })
     }

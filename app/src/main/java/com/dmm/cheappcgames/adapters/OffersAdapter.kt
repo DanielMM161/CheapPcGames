@@ -21,8 +21,6 @@ class OffersAdapter(val gamesDistributor: List<StoreItem>) : ListAdapter<Offer, 
         }
     }
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfferViewHolder {
         val binding = ItemOffersBinding.inflate(LayoutInflater.from(parent.context))
         return OfferViewHolder(binding)
