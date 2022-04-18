@@ -1,5 +1,6 @@
 package com.dmm.cheappcgames.binding
 
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.net.toUri
@@ -9,6 +10,8 @@ import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.data.StoreItem
 import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.utils.Constants.Companion.BASE_URL_LOGO
+import java.net.URL
+import java.net.URLConnection
 import kotlin.math.truncate
 
 object BindingOffers {
@@ -22,6 +25,7 @@ object BindingOffers {
                 placeholder(R.drawable.loading_animation)
                 error(R.drawable.ic_baseline_broken_image_24)
             }
+
         }
     }
 
@@ -45,8 +49,8 @@ object BindingOffers {
     @BindingAdapter("textSaving")
     @JvmStatic
     fun bindSaving(textView: TextView, text: String) {
-        var savings  = truncate(text.toDouble()).toInt()
-        textView.text = savings.toString() + "%"
+        val savings  = truncate(text.toDouble()).toInt()
+        textView.text = "$savings%"
     }
 
 }

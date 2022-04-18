@@ -5,10 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.dmm.cheappcgames.data.StoreItem
+import com.dmm.cheappcgames.data.Offer
 
-@Database(entities = [StoreItem::class], version = 1)
-@TypeConverters(ImagesConverter::class)
+@Database(entities = [Offer::class], version = 1, exportSchema = false)
 abstract class CheapPcDataBase : RoomDatabase() {
 
     abstract fun storeDao(): StoreDao

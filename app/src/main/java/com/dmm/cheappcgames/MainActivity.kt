@@ -2,13 +2,8 @@ package com.dmm.cheappcgames
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -20,6 +15,7 @@ import com.dmm.cheappcgames.ui.OffersRepository
 import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.ui.ViewModelFactory
 import com.dmm.cheappcgames.utils.Constants
+import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
@@ -32,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var navController: NavController
     private lateinit var searchView: SearchView
     private lateinit var menuItem: MenuItem
+    private lateinit var materiaToolbar: MaterialToolbar
     var onNextClicked: () -> Unit = {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,29 +44,43 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.fragmentsOffers, R.id.fragmentSearch))
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.fragmentsOffers, R.id.fragmentFavorites))
 
         binding.materialToolbar.setupWithNavController(navController, appBarConfiguration)
         binding.bottomNavigation.setupWithNavController(navController)
 
-        setVisibleSearchView()
+
+        materiaToolbar = binding.materialToolbar
+        menuItem = materiaToolbar.menu.findItem(R.id.app_bar_search)
+        menuItem.setVisible(true)
         searchView = menuItem.actionView as SearchView
+
+        destinationChangedListener()
         searchViewEvents()
     }
 
-    fun setVisibleSearchView() {
-        menuItem = binding.materialToolbar.menu.findItem(R.id.app_bar_search)
-        menuItem.setVisible(true)
-        navController.addOnDestinationChangedListener{ controller, destination, argumntents ->
+    fun destinationChangedListener() {
+        navController.addOnDestinationChangedListener{ _, destination, _ ->
             when(destination.id) {
-                R.id.fragmentFilter -> menuItem.setVisible(false)
+                R.id.fragmentFilter -> {
+                    setTitleMateriaToolbar(R.string.fragment_filter)
+                    menuItem.setVisible(false)
+                }
                 R.id.fragmentsOffers -> {
+                    setTitleMateriaToolbar(R.string.fragment_offers)
                     onNextClicked.invoke()
                     menuItem.setVisible(true)
+                }
+                R.id.fragmentFavorites -> {
+                    setTitleMateriaToolbar(R.string.fragment_favorites)
                 }
                 else -> menuItem.setVisible(true)
             }
         }
+    }
+
+    private fun setTitleMateriaToolbar(resId: Int) {
+        materiaToolbar.title = getString(resId)
     }
 
     fun searchViewEvents() {

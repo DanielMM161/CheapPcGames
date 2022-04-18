@@ -1,8 +1,7 @@
 package com.dmm.cheappcgames.ui
 
-import com.dmm.cheappcgames.data.StoreItem
+import com.dmm.cheappcgames.data.Offer
 import com.dmm.cheappcgames.db.CheapPcDataBase
-import com.dmm.cheappcgames.network.OffersApi
 import com.dmm.cheappcgames.network.RetrofitInstance
 
 class OffersRepository(
@@ -20,5 +19,7 @@ class OffersRepository(
     suspend fun getSotres() =
         RetrofitInstance.api.getSotres()
 
-    suspend fun insertStores(stores: List<StoreItem>) = db.storeDao().insertAll(stores)
+    suspend fun insertGame(game: Offer) = db.storeDao().insertGame(game)
+
+    fun getFavoritesOffers() = db.storeDao().getFavoritesOffers()
 }

@@ -2,9 +2,7 @@ package com.dmm.cheappcgames.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -13,7 +11,6 @@ import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.DistributorAdapter
 import com.dmm.cheappcgames.databinding.FragmentFilterBinding
 import com.dmm.cheappcgames.ui.OffersViewModel
-
 
 class FragmentFilter : Fragment() {
 
@@ -41,24 +38,24 @@ class FragmentFilter : Fragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    viewModel.resetResponseOffers()
                     viewModel.getOffers()
                     findNavController().navigate(R.id.action_fragmentFilter_to_fragmentsOffers)
                 }
             }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        viewModel.resetResponseOffers()
+        viewModel.resetGameById()
     }
 
     private fun setGrid() = binding.grid.apply {
         val gamesDistributor = viewModel.gamesDistributor.value?.data
         val activeDistributors = gamesDistributor?.filter { item -> item.isActive == 1 }!!
 
-        adapter = DistributorAdapter(context, activeDistributors, viewModel)
+        adapter = DistributorAdapter(activeDistributors, viewModel)
     }
 
     override fun onAttach(context: Context) {
         (activity as MainActivity).onNextClicked = {
-            viewModel.resetResponseOffers()
             viewModel.getOffers()
         }
         super.onAttach(context)
