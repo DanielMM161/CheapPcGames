@@ -4,22 +4,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:liftOnScroll="true">
+            app:liftOnScroll="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/material_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-
+                app:titleCentered="true"
+                app:subtitleCentered="true"
                 app:menu="@menu/toolbar_menu"/>
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -31,18 +34,18 @@
             android:layout_height="match_parent"
             android:layout_marginTop="?attr/actionBarSize"
             app:defaultNavHost="true"
-
+            android:layout_marginBottom="?attr/actionBarSize"
             app:navGraph="@navigation/nav_graph"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="65dp"
-            android:layout_gravity="bottom"
-            app:layout_anchorGravity="bottom"
-            app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
-            app:layout_anchor="@id/nav_host_fragment"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:itemHorizontalTranslationEnabled="true"
             app:menu="@menu/bottom_navigation_menu"/>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

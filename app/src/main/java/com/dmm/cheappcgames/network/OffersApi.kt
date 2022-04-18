@@ -4,6 +4,8 @@ import com.dmm.cheappcgames.data.GameItem
 import com.dmm.cheappcgames.data.Offer
 import com.dmm.cheappcgames.data.StoreItem
 import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 

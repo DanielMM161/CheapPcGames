@@ -3,16 +3,6 @@
     <string name="textFilter">Distributor</string>
     <string name="cancel">Cancel</string>
     <string name="filter">Filter</string>
-    <string name="search">Search…</string>
+    <string name="search">Search...</string>
     <string name="savings">%s %</string>
-    <string name="save">Save</string>
-
-    <!-- Fragment Titles-->
-    <string name="fragment_offers">Offers</string>
-    <string name="fragment_filter">Filter</string>
-    <string name="fragment_favorites">Favorites</string>
-    <string name="descriptionImage">image of the game %s</string>
-    <string name="all_offers">All offers</string>
-    <string name="search_offers">Search offers</string>
-    <string name="logostore">logo store of the game</string>
 </resources>

@@ -13,12 +13,13 @@ import com.dmm.cheappcgames.adapters.GameDealersAdapter
 import com.dmm.cheappcgames.data.GameItem
 import com.dmm.cheappcgames.databinding.FragmentShowOfferDialogBinding
 import com.dmm.cheappcgames.ui.OffersViewModel
-import com.google.android.material.snackbar.Snackbar
 
-class FragmentShowOfferDialog(val gameItem: GameItem) : DialogFragment() {
+class FragmentShowOfferDialog() : DialogFragment() {
 
     private lateinit var _binding : FragmentShowOfferDialogBinding
     private val binding get() = _binding
+
+    private lateinit var gameItem: GameItem
 
     lateinit var viewModel: OffersViewModel
 
@@ -34,17 +35,9 @@ class FragmentShowOfferDialog(val gameItem: GameItem) : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentShowOfferDialogBinding.bind(view)
         viewModel = (activity as MainActivity).viewModel
+        gameItem = viewModel.gameId.value?.data!!
         binding.game = gameItem
         setUpListView()
-
-        binding.favorite.setOnClickListener { _ ->
-            val offerGame = viewModel.offersGame.value?.data?.filter { item -> item.gameID.equals(gameItem.gameId) }
-            if(offerGame?.size!! > 0) {
-                viewModel.saveGame(offerGame[0])
-                Snackbar.make(view, "The game saved successfully", Snackbar.LENGTH_SHORT).show()
-            }
-
-        }
     }
 
     fun setUpListView() = binding.distributorList.apply {
@@ -56,4 +49,5 @@ class FragmentShowOfferDialog(val gameItem: GameItem) : DialogFragment() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         return dialog
     }
+
 }

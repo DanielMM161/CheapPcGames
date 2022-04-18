@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -10,54 +11,39 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/image"
-            imageUrl="@{game.info.thumb}"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
             android:background="@drawable/gradient_layout"
-            android:contentDescription="@{@string/descriptionImage(game.info.title)}" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            imageUrl="@{game.info.thumb}" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/image"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="8dp"
-            android:layout_toStartOf="@+id/favorite"
-            android:text="@{game.info.title}"
-            android:gravity="center"
-            tools:text="The Witcher"
-            android:textAlignment="center" />
-
-        <Button
-            android:id="@+id/favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/ButtonDistributor"
-            android:layout_below="@+id/image"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="8dp"
+            android:layout_below="@+id/image"
             android:layout_marginTop="8dp"
-            android:text="@string/save"
-            android:src="@drawable/ic_baseline_favorite_border_24" />
+            android:textAlignment="center"
+            android:text="@{game.info.title}"/>
 
         <ListView
             android:id="@+id/distributor_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:scrollbars="vertical"
             android:layout_below="@+id/name"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="8dp"
-            android:scrollbars="vertical" />
+            android:padding="4dp"
+            android:layout_marginTop="8dp" />
 
     </RelativeLayout>
 </layout>

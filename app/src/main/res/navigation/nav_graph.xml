@@ -10,9 +10,6 @@
         <action
             android:id="@+id/action_fragmentsOffers_to_fragmentFilter"
             app:destination="@id/fragmentFilter" />
-        <action
-            android:id="@+id/action_fragmentsOffers_to_fragmentFavorites"
-            app:destination="@id/fragmentFavorites" />
     </fragment>
     <fragment
         android:id="@+id/fragmentFilter"
@@ -23,11 +20,7 @@
             app:destination="@id/fragmentsOffers" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentFavorites"
-        android:name="com.dmm.cheappcgames.fragments.FragmentFavorites"
-        android:label="FragmentFavorites" >
-        <action
-            android:id="@+id/action_fragmentFavorites_to_fragmentsOffers"
-            app:destination="@id/fragmentsOffers" />
-    </fragment>
+        android:id="@+id/fragmentSearch"
+        android:name="com.dmm.cheappcgames.fragments.FragmentSearch"
+        android:label="FragmentSearch" />
 </navigation>

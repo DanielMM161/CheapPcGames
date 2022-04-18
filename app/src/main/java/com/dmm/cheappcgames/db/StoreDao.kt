@@ -1,16 +1,15 @@
 package com.dmm.cheappcgames.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.dmm.cheappcgames.data.Offer
+import com.dmm.cheappcgames.data.StoreItem
 
 @Dao
 interface StoreDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertGame(game: Offer)
+    @Query("Select * FROM stores")
+    fun getStores(): List<StoreItem>
 
-    @Query("SELECT * FROM offers")
-    fun getFavoritesOffers(): LiveData<List<Offer>>
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAll(stores: List<StoreItem>)
 
 }
