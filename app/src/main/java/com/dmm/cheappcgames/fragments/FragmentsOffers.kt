@@ -13,6 +13,7 @@ import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.OffersAdapter
 import com.dmm.cheappcgames.data.GameItem
 import com.dmm.cheappcgames.data.Offer
+import com.dmm.cheappcgames.data.StoreItem
 import com.dmm.cheappcgames.databinding.FragmentOffersBinding
 import com.dmm.cheappcgames.resource.Resource
 import com.dmm.cheappcgames.ui.OffersViewModel
@@ -42,7 +43,6 @@ class FragmentsOffers() : Fragment() {
         observeGamesDistributor()
         observeOffers()
         observeSearch()
-
         observeGameId()
 
         binding.filter.setOnClickListener {
@@ -61,7 +61,7 @@ class FragmentsOffers() : Fragment() {
             val layoutManager = recyclerView.layoutManager as LinearLayoutManager
             val firstElementVisible = layoutManager.findFirstVisibleItemPosition()
             val visibleItemCount = layoutManager.childCount
-            val totalItem = layoutManager.itemCount
+            val totalItem = offersAdapter.differ.currentList.size
 
             val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
             val isLastItem = firstElementVisible + visibleItemCount >= totalItem
@@ -89,9 +89,8 @@ class FragmentsOffers() : Fragment() {
         }
     }
 
-    fun setUpRecyclerView() {
+    fun setUpRecyclerView(gamesDistributor: List<StoreItem>) {
         binding.rvOffers.apply {
-            val gamesDistributor = viewModel.gamesDistributor.value?.data!!
             offersAdapter = OffersAdapter(gamesDistributor)
             adapter = offersAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -117,7 +116,6 @@ class FragmentsOffers() : Fragment() {
     fun showDialog(gameItem: GameItem) {
         val dialog = FragmentShowOfferDialog(gameItem)
         dialog.show(parentFragmentManager, "showOffer")
-        viewModel.gameId.removeObserver {}
     }
 
     private fun responseSuccess(response: Resource<List<Offer>>) {
@@ -133,7 +131,6 @@ class FragmentsOffers() : Fragment() {
         viewModel.offersGame.observe(viewLifecycleOwner, Observer { response ->
             when(response) {
                 is Resource.Success -> {
-                    setUpRecyclerView()
                     responseSuccess(response)
                 }
                 is Resource.Loading -> {
@@ -169,6 +166,9 @@ class FragmentsOffers() : Fragment() {
             when(response) {
                 is Resource.Success -> {
                     viewModel.getOffers()
+                    response.data?.let { it ->
+                        setUpRecyclerView(it)
+                    }
                 }
                 is Resource.Loading -> {
                     showProgressBar()
