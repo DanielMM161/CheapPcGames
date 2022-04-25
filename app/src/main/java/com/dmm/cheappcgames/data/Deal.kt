@@ -5,5 +5,6 @@ data class Deal(
     val price: String,
     val retailPrice: String,
     val savings: String,
-    val storeID: String
+    val storeID: String,
+    var storeItem: StoreItem
 )

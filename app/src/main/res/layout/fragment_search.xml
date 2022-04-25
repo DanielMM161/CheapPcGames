@@ -5,10 +5,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="fragments.FragmentsOffers">
+        tools:context="fragments.FragmentSearch">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvOffers"
+            android:id="@+id/rv_search_deals"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbarStyle="outsideOverlay"
@@ -17,19 +17,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/rvOffers"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="28dp"
-            android:layout_marginBottom="90dp"
-            android:contentDescription="@string/filter"
-            android:elevation="10dp"
-            android:src="@drawable/ic_baseline_filter_alt_24" />
-
+        
         <ProgressBar
             android:id="@+id/paginationProgressbar"
             style="?attr/progressBarStyle"
@@ -44,4 +32,3 @@
     </RelativeLayout>
 
 </layout>
-

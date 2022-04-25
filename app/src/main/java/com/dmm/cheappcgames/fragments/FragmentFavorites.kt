@@ -71,15 +71,12 @@ class FragmentFavorites() : Fragment() {
         viewModel.getFavoritesGames().observe(viewLifecycleOwner) { it ->
             offersAdapter.differ.submitList(it)
         }
-        viewModel.resetGameById()
     }
 
-    private fun setupRecyclerView() {
-        val gameDistributor = viewModel.gamesDistributor.value?.data!!
-        offersAdapter = OffersAdapter(gameDistributor)
-        binding.rvFavorites.apply {
-            adapter = offersAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
+    private fun setupRecyclerView() = binding.rvFavorites.apply {
+        offersAdapter = OffersAdapter()
+        adapter = offersAdapter
+        layoutManager = LinearLayoutManager(requireContext())
     }
+
 }

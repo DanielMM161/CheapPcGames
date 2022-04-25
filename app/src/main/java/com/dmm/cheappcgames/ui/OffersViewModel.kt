@@ -1,32 +1,35 @@
 package com.dmm.cheappcgames.ui
 
 import android.view.View
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmm.cheappcgames.data.GameItem
 import com.dmm.cheappcgames.data.Offer
 import com.dmm.cheappcgames.data.StoreItem
 import com.dmm.cheappcgames.resource.Resource
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.Response
-
 
 class OffersViewModel(
     private val repository: OffersRepository
 ) : ViewModel() {
 
-    val offersGame: MutableLiveData<Resource<List<Offer>>?> = MutableLiveData()
-    var offersPage = 1
-    var offersGameResponse: MutableList<Offer>? = null
+    private var _dealsGames = MutableStateFlow<Resource<List<Offer>>>(Resource.Loading())
+    val dealsGames = _dealsGames.asStateFlow()
+    var dealsPage = 0
+    private var dealsGamesResponse: MutableList<Offer>? = null
 
-    val searchOffers: MutableLiveData<Resource<List<Offer>>> = MutableLiveData()
-    var searchPage = 0
-    var searchOffersResponse: MutableList<Offer>? = null
+    private var _dealsGamesSearch = MutableStateFlow<Resource<List<Offer>>>(Resource.Pause())
+    val dealsGamesSearch = _dealsGamesSearch.asStateFlow()
+    private var dealsPageSearch = 0
+    private var dealsGamesResponseSearch: MutableList<Offer>? = null
 
-    val gamesDistributor: MutableLiveData<Resource<List<StoreItem>>> = MutableLiveData()
+    private var _gamesStores: List<StoreItem> = emptyList()
+    val gamesStores get() = _gamesStores
 
-    var gameId: MutableLiveData<Resource<GameItem>> = MutableLiveData()
+    private var _gameId = MutableStateFlow<Resource<GameItem>>(Resource.Pause())
+    val gameId = _gameId.asStateFlow()
 
     var storesSelectedList: MutableList<String> = ArrayList()
 
@@ -36,42 +39,51 @@ class OffersViewModel(
         getStores()
     }
 
-    fun getOffers() = viewModelScope.launch {
-        offersGame.postValue(Resource.Loading())
-        if(isStoresSelected()) {
-            var storesSelected = ""
-            storesSelectedList.forEachIndexed { index, element -> if(index == storesSelectedList.size - 1) storesSelected = storesSelected+element else storesSelected = "${storesSelected+element}," }
-            val response = repository.getOffers(offersPage, storesSelected)
-            offersGame.postValue(handleOffersResponse(response))
-        } else {
-            val response = repository.getOffers(offersPage)
-            offersGame.postValue(handleOffersResponse(response))
+    private fun getDeals() = viewModelScope.launch {
+        _dealsGames.value = Resource.Loading()
+        val response = repository.getDeals(dealsPage)
+        _dealsGames.value = handleDealsGamesResponse(response)
+    }
+
+    private fun getStores() = viewModelScope.launch {
+        val response = repository.getStores()
+        _gamesStores = handleGamesStores(response)
+        if(_gamesStores.isNotEmpty()) {
+            getDeals()
         }
     }
 
-    fun getSearchOffers(title: String) = viewModelScope.launch {
-        searchOffers.postValue(Resource.Loading())
-        if(isStoresSelected()) {
-            var storesSelected = ""
-            storesSelectedList.forEachIndexed { index, element -> if(index == storesSelectedList.size - 1) storesSelected = storesSelected+element else storesSelected = "${storesSelected+element}," }
-            val response = repository.getSearchOffers(searchPage, storesSelected, title)
-            searchOffers.postValue(handleSearchResponse(response))
-        } else {
-            val response = repository.getSearchOffers(searchPage, title = title)
-            searchOffers.postValue(handleSearchResponse(response))
-        }
+    fun getDealsByTitle() = viewModelScope.launch {
+        _dealsGamesSearch.value = Resource.Loading()
+        val response = repository.getDealsByTitle(dealsPageSearch, searchText)
+        _dealsGamesSearch.value = handleDealsGamesSearchResponse(response)
+        _dealsGamesSearch.value = Resource.Pause()
     }
 
-    fun getStores() = viewModelScope.launch {
-        gamesDistributor.postValue(Resource.Loading())
-        val response = repository.getSotres()
-        gamesDistributor.postValue(handleGamesDistributor(response))
+    private fun getFilteredDeals() = viewModelScope.launch {
+        var storesId: String = ""
+        storesSelectedList.forEachIndexed { index, element -> storesId =
+            if(index == storesSelectedList.size - 1) storesId+element else "${storesId+element},"
+        }
+
+        _dealsGames.value = Resource.Loading()
+        val response = repository.getFilteredDeals(dealsPage, storesId)
+        _dealsGames.value = handleDealsGamesResponse(response)
     }
 
     fun getGameById(id: Int) = viewModelScope.launch {
-        gameId.postValue(Resource.Loading())
+        _gameId.value = Resource.Loading()
         val response = repository.getGameById(id)
-        gameId.postValue(handleGameById(response, id.toString()))
+        _gameId.value = handleGameById(response, id.toString())
+        _gameId.value = Resource.Pause()
+    }
+
+    fun dealsHandler() {
+         if(storesSelectedList.size > 0) {
+            getFilteredDeals()
+        } else {
+            getDeals()
+        }
     }
 
     fun saveGame(game: Offer) = viewModelScope.launch {
@@ -84,74 +96,85 @@ class OffersViewModel(
 
     fun getFavoritesGames() = repository.getFavoritesOffers()
 
-    private fun handleOffersResponse(response: Response<List<Offer>>) : Resource<List<Offer>> {
+    private fun handleDealsGamesResponse(response: Response<List<Offer>>) : Resource<List<Offer>> {
         if(response.isSuccessful) {
             response.body()?.let { result ->
-                offersPage++
-                if(offersGameResponse == null) {
-                    offersGameResponse = result.toMutableList()
+                dealsPage++
+                if(dealsGamesResponse == null) {
+                    dealsGamesResponse = addStoreItemtoDealsItem(result.toMutableList()).toMutableList()
                 } else {
-                    val oldGames = offersGameResponse
-                    val newGames = result
+                    val oldGames = dealsGamesResponse
+                    val newGames = addStoreItemtoDealsItem(result)
                     oldGames?.addAll(newGames)
                 }
-                return Resource.Success(offersGameResponse ?: result)
+                return Resource.Success(dealsGamesResponse ?: result)
             }
         }
         return Resource.Error(response.message())
     }
 
-    private fun handleSearchResponse(response: Response<List<Offer>>) : Resource<List<Offer>> {
+    private fun handleDealsGamesSearchResponse(response: Response<List<Offer>>) : Resource<List<Offer>> {
         if(response.isSuccessful) {
             response.body()?.let { result ->
-                searchPage++
-                if(searchOffersResponse == null) {
-                    searchOffersResponse = result.toMutableList()
+                dealsPageSearch++
+                if(dealsGamesResponseSearch == null) {
+                    dealsGamesResponseSearch = addStoreItemtoDealsItem(result.toMutableList()).toMutableList()
                 } else {
-                    val oldGames = searchOffersResponse
-                    val newGames = result
+                    val oldGames = dealsGamesResponseSearch
+                    val newGames = addStoreItemtoDealsItem(result)
                     oldGames?.addAll(newGames)
                 }
-                return Resource.Success(searchOffersResponse ?: result)
+                return Resource.Success(dealsGamesResponseSearch ?: result)
             }
         }
         return Resource.Error(response.message())
     }
 
-    private fun handleGamesDistributor(response: Response<List<StoreItem>>) : Resource<List<StoreItem>> {
+    private fun addStoreItemtoDealsItem(deals: List<Offer>) : List<Offer> {
+       return deals.map { deal ->
+            val storeId = deal.storeID
+            val store = _gamesStores.find { store -> store.storeID.equals(storeId) }
+            store?.let {
+                deal.storeItem = it
+            }
+           deal
+        }
+    }
+
+    private fun handleGamesStores(response: Response<List<StoreItem>>) : List<StoreItem> {
+        var gamesStores: List<StoreItem> = emptyList()
         if(response.isSuccessful) {
             response.body()?.let { result ->
-                return Resource.Success(result.toMutableList())
+               gamesStores = result
             }
         }
-        return Resource.Error(response.message())
+        return gamesStores
     }
 
     private fun handleGameById(response: Response<GameItem>, id: String) : Resource<GameItem> {
         if(response.isSuccessful) {
-            response.body()?.let { result ->
-                return Resource.Success(result.copy(gameId = id))
+            response.body()?.let { resResult ->
+                resResult.deals.forEach { item ->
+                    val storeId = item.storeID
+                    val store =  _gamesStores.find { store -> store.storeID == storeId }
+                    store?.let {
+                        item.storeItem = it
+                    }
+                }
+                return Resource.Success(resResult.copy(gameId = id))
             }
         }
         return Resource.Error(response.message())
     }
 
-    private fun isStoresSelected(): Boolean {
-        return storesSelectedList.size != 0
+    fun resetResponse() {
+        dealsGamesResponse = null
+        dealsPage = 0
     }
 
-    fun resetResponseOffers() {
-        offersGameResponse = null
-        offersPage = 1
-    }
-
-    fun resetGameById() {
-        gameId =  MutableLiveData()
-    }
-
-    fun resetResponseSearch() {
-        searchOffersResponse = null
-        searchPage = 0
+    fun resetSearchResponse() {
+        dealsGamesResponseSearch = null
+        dealsPageSearch = 0
     }
 
     fun handleOnClickMaterial(view: View, storeItem: StoreItem) {

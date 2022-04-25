@@ -1,24 +1,19 @@
 package com.dmm.cheappcgames.adapters
 
-
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dmm.cheappcgames.data.Offer
-import com.dmm.cheappcgames.data.StoreItem
 import com.dmm.cheappcgames.databinding.ItemOffersBinding
-import com.dmm.cheappcgames.ui.OffersViewModel
 
-class OffersAdapter(val gamesDistributor: List<StoreItem>) : RecyclerView.Adapter<OffersAdapter.OfferViewHolder>() {
+class OffersAdapter() : RecyclerView.Adapter<OffersAdapter.OfferViewHolder>() {
 
     inner class OfferViewHolder(private val binding: ItemOffersBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(offer: Offer, gamesDistributor: List<StoreItem>) {
+        fun bind(offer: Offer) {
             binding.offer = offer
-            binding.stores = gamesDistributor
         }
     }
 
@@ -46,13 +41,14 @@ class OffersAdapter(val gamesDistributor: List<StoreItem>) : RecyclerView.Adapte
     private var onItemClickListener: ((Offer) -> Unit)? = null
 
     override fun onBindViewHolder(holder: OfferViewHolder, position: Int) {
+        Log.e("OFFERS ADAPTER -----> ", "${getItemCount()}")
         val item = differ.currentList[position]
         holder.itemView.apply {
            setOnClickListener {
                onItemClickListener?.let { it(item) }
            }
         }
-        holder.bind(item, gamesDistributor)
+        holder.bind(item)
     }
 
     fun setOnItemClickListener(listener: (Offer) -> Unit) {

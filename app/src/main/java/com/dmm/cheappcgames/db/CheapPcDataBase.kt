@@ -8,6 +8,7 @@ import androidx.room.TypeConverters
 import com.dmm.cheappcgames.data.Offer
 
 @Database(entities = [Offer::class], version = 1, exportSchema = false)
+@TypeConverters(StoreItemConverter::class)
 abstract class CheapPcDataBase : RoomDatabase() {
 
     abstract fun storeDao(): StoreDao

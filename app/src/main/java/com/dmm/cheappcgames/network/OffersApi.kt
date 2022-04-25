@@ -12,17 +12,21 @@ interface OffersApi {
     @GET("deals")
     suspend fun getDeals(
         @Query("pageNumber")
-        pageNumber: Int = 1,
-        @Query("storeID")
-        storeId: String ?= null
+        pageNumber: Int = 0
     ) : Response<List<Offer>>
 
     @GET("deals")
-    suspend fun getSearchDeals(
+    suspend fun getFilteredDeals(
         @Query("pageNumber")
         pageNumber: Int = 0,
         @Query("storeID")
-        storeId: String ?= null,
+        storesId: String
+    ) : Response<List<Offer>>
+
+    @GET("deals")
+    suspend fun getDealsByTitle(
+        @Query("pageNumber")
+        pageNumber: Int = 0,
         @Query("title")
         title: String ?= null
     ) : Response<List<Offer>>
@@ -34,5 +38,5 @@ interface OffersApi {
     ) : Response<GameItem>
 
     @GET("stores")
-    suspend fun getSotres() : Response<List<StoreItem>>
+    suspend fun getStores() : Response<List<StoreItem>>
 }

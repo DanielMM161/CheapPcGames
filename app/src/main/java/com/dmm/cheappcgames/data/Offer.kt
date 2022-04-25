@@ -44,5 +44,7 @@ data class Offer(
     @ColumnInfo(name = "thumb")
     val thumb: String,
     @ColumnInfo(name = "title")
-    val title: String
+    val title: String,
+    @ColumnInfo(name = "store_item")
+    var storeItem: StoreItem
 )

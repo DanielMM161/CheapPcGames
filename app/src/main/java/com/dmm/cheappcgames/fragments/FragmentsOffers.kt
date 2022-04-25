@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.*
 import android.widget.AbsListView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,12 +14,12 @@ import com.dmm.cheappcgames.MainActivity
 import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.OffersAdapter
 import com.dmm.cheappcgames.data.GameItem
-import com.dmm.cheappcgames.data.Offer
-import com.dmm.cheappcgames.data.StoreItem
 import com.dmm.cheappcgames.databinding.FragmentOffersBinding
 import com.dmm.cheappcgames.resource.Resource
 import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.utils.Constants.Companion.QUERY_PAGE_SIZE
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class FragmentsOffers() : Fragment() {
 
@@ -39,11 +41,18 @@ class FragmentsOffers() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentOffersBinding.bind(view)
         viewModel = (activity as MainActivity).viewModel
+        setUpRecyclerView()
 
-        observeGamesDistributor()
-        observeOffers()
-        observeSearch()
-        observeGameId()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+               launch {
+                   subscribeObservableDeals()
+               }
+                launch {
+                    subscribeObservableGameId()
+                }
+            }
+        }
 
         binding.filter.setOnClickListener {
             showFilter()
@@ -54,7 +63,7 @@ class FragmentsOffers() : Fragment() {
     var isLastPage = false
     var isScrolling = false
 
-    val scrollListener = object : RecyclerView.OnScrollListener() {
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
 
@@ -69,11 +78,7 @@ class FragmentsOffers() : Fragment() {
             val isTotalMoreThanVisible = totalItem >= QUERY_PAGE_SIZE
             val shouldPaginate = isNotLoadingAndNotLastPage && isLastItem && isNotAtBegining && isTotalMoreThanVisible && isScrolling
             if(shouldPaginate) {
-                if(viewModel.searchText.isNotBlank()) {
-                    viewModel.getSearchOffers(viewModel.searchText)
-                } else {
-                    viewModel.getOffers()
-                }
+                viewModel.dealsHandler()
                 isScrolling = false
             } else {
                 binding.rvOffers.setPadding(0, 0, 0, 0)
@@ -89,9 +94,9 @@ class FragmentsOffers() : Fragment() {
         }
     }
 
-    fun setUpRecyclerView(gamesDistributor: List<StoreItem>) {
+    private fun setUpRecyclerView() {
         binding.rvOffers.apply {
-            offersAdapter = OffersAdapter(gamesDistributor)
+            offersAdapter = OffersAdapter()
             adapter = offersAdapter
             layoutManager = LinearLayoutManager(requireContext())
             addOnScrollListener(this@FragmentsOffers.scrollListener)
@@ -113,80 +118,40 @@ class FragmentsOffers() : Fragment() {
         isLoading = true
     }
 
-    fun showDialog(gameItem: GameItem) {
+    private fun showDialog(gameItem: GameItem) {
         val dialog = FragmentShowOfferDialog(gameItem)
         dialog.show(parentFragmentManager, "showOffer")
     }
 
-    private fun responseSuccess(response: Resource<List<Offer>>) {
-        response.data?.let { offers ->
-            offersAdapter.differ.submitList(offers.toList())
-            val totalPages = offers.size / QUERY_PAGE_SIZE + 2
-            isLastPage = viewModel.offersPage == totalPages
-            hiddenProgressBar()
+    private suspend fun subscribeObservableDeals() = viewModel.dealsGames.collect {
+        showProgressBar()
+        when(it) {
+            is Resource.Success -> {
+                it.data?.let { offers ->
+                    offersAdapter.differ.submitList(offers)
+                    //Temporal Solution
+                    offersAdapter.notifyItemRangeChanged(0, offers.size)
+                    val totalPages = offers.size / QUERY_PAGE_SIZE + 2
+                    isLastPage = viewModel.dealsPage == totalPages
+                    hiddenProgressBar()
+                }
+            }
+            is Resource.Loading -> {
+                showProgressBar()
+            }
+            is Resource.Error -> {
+                hiddenProgressBar()
+            }
+            else -> { hiddenProgressBar() }
         }
     }
 
-    private fun observeOffers() {
-        viewModel.offersGame.observe(viewLifecycleOwner, Observer { response ->
-            when(response) {
+    private suspend fun subscribeObservableGameId() {
+        viewModel.gameId.collect {
+            when(it) {
                 is Resource.Success -> {
-                    responseSuccess(response)
-                }
-                is Resource.Loading -> {
-                    showProgressBar()
-                }
-                is Resource.Error -> {
-                    hiddenProgressBar()
-                }
-                else -> { hiddenProgressBar() }
-            }
-        })
-    }
-
-    private fun observeSearch() {
-        viewModel.searchOffers.observe(viewLifecycleOwner, Observer { response ->
-            when(response) {
-                is Resource.Success -> {
-                    responseSuccess(response)
-                }
-                is Resource.Loading -> {
-                    showProgressBar()
-                }
-                is Resource.Error -> {
-                    hiddenProgressBar()
-                }
-                else -> { hiddenProgressBar() }
-            }
-        })
-    }
-
-    private fun observeGamesDistributor() {
-        viewModel.gamesDistributor.observe(viewLifecycleOwner, Observer { response ->
-            when(response) {
-                is Resource.Success -> {
-                    viewModel.getOffers()
-                    response.data?.let { it ->
-                        setUpRecyclerView(it)
-                    }
-                }
-                is Resource.Loading -> {
-                    showProgressBar()
-                }
-                is Resource.Error -> {
-                    hiddenProgressBar()
-                }
-                else -> { hiddenProgressBar() }
-            }
-        })
-    }
-
-    private fun observeGameId() {
-        viewModel.gameId.observe(viewLifecycleOwner, Observer { response ->
-            when(response) {
-                is Resource.Success -> {
-                    response.data.let { it ->
-                        showDialog(it!!)
+                    it.data?.let { game ->
+                        showDialog(game)
                         hiddenProgressBar()
                     }
                 }
@@ -198,14 +163,12 @@ class FragmentsOffers() : Fragment() {
                 }
                 else -> { hiddenProgressBar() }
             }
-        })
+        }
     }
 
-    private fun itemClickListener() {
-        offersAdapter.setOnItemClickListener { it ->
-            val id = it.gameID.toInt()
-            viewModel.getGameById(id)
-        }
+    private fun itemClickListener() = offersAdapter.setOnItemClickListener {
+        val id = it.gameID.toInt()
+        viewModel.getGameById(id)
     }
 
 }

@@ -4,16 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="java.util.List"/>
-        <import type="com.dmm.cheappcgames.data.StoreItem"/>
-
         <variable
             name="offer"
             type="com.dmm.cheappcgames.data.Offer" />
-
-        <variable
-            name="stores"
-            type="List&lt;StoreItem>" />
     </data>
 
     <LinearLayout
@@ -54,9 +47,8 @@
                     android:layout_height="25dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="16dp"
-                    app:storeId="@{offer.storeID}"
                     android:contentDescription="@string/logostore"
-                    app:stores="@{stores}" />
+                    app:logoUrl="@{offer.storeItem.images.logo}"/>
 
                 <TextView
                     android:id="@+id/normal_price"

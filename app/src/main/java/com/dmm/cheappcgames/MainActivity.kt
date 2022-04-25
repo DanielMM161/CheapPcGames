@@ -3,6 +3,7 @@ package com.dmm.cheappcgames
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -14,22 +15,16 @@ import com.dmm.cheappcgames.db.CheapPcDataBase
 import com.dmm.cheappcgames.ui.OffersRepository
 import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.ui.ViewModelFactory
-import com.dmm.cheappcgames.utils.Constants
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     lateinit var viewModel: OffersViewModel
     lateinit var navController: NavController
-    private lateinit var searchView: SearchView
     private lateinit var menuItem: MenuItem
-    private lateinit var materiaToolbar: MaterialToolbar
+    private lateinit var searchView: SearchView
     lateinit var bottomNavigation: BottomNavigationView
     var onNextClicked: () -> Unit = {}
 
@@ -51,71 +46,95 @@ class MainActivity : AppCompatActivity() {
         binding.materialToolbar.setupWithNavController(navController, appBarConfiguration)
         binding.bottomNavigation.setupWithNavController(navController)
 
-
         bottomNavigation = binding.bottomNavigation
-        materiaToolbar = binding.materialToolbar
-        menuItem = materiaToolbar.menu.findItem(R.id.app_bar_search)
-        menuItem.setVisible(true)
+        menuItem = binding.materialToolbar.menu.findItem(R.id.app_bar_search)
         searchView = menuItem.actionView as SearchView
 
         destinationChangedListener()
+        menuItemEvents()
         searchViewEvents()
     }
 
     fun destinationChangedListener() {
-        navController.addOnDestinationChangedListener{ _, destination, _ ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            showBottomNavigation()
             when(destination.id) {
                 R.id.fragmentFilter -> {
                     setTitleMateriaToolbar(R.string.fragment_filter)
-                    menuItem.setVisible(false)
+                    setVisibilityMenuItem(false)
+                    binding.materialToolbar.collapseActionView()
                 }
                 R.id.fragmentsOffers -> {
                     setTitleMateriaToolbar(R.string.fragment_offers)
                     onNextClicked.invoke()
-                    menuItem.setVisible(true)
+                    setVisibilityMenuItem(true)
                 }
                 R.id.fragmentFavorites -> {
                     setTitleMateriaToolbar(R.string.fragment_favorites)
+                    setVisibilityMenuItem(false)
+                    binding.materialToolbar.collapseActionView()
                 }
-                else -> menuItem.setVisible(true)
+                R.id.fragmentSearch -> {
+                    hiddeBottomNavigation()
+                    viewModel.resetSearchResponse()
+                }
             }
         }
     }
 
     private fun setTitleMateriaToolbar(resId: Int) {
-        materiaToolbar.title = getString(resId)
+        binding.materialToolbar.title = getString(resId)
+    }
+
+    private fun showBottomNavigation() {
+        bottomNavigation.visibility = View.VISIBLE
+    }
+
+    private fun setVisibilityMenuItem(visibility: Boolean) {
+        menuItem.isVisible = visibility
+    }
+
+    private fun hiddeBottomNavigation() {
+        bottomNavigation.visibility = View.GONE
     }
 
     fun searchViewEvents() {
         var job: Job? = null
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                job?.cancel()
-                job = MainScope().launch {
-                    delay(Constants.SEARCH_TIME_DELAY)
-                    newText?.let {
-                        if(newText.isNotEmpty()) {
-                            viewModel.resetResponseSearch()
-                            viewModel.searchText = newText
-                            viewModel.getSearchOffers(newText.toString())
-                        } else {
-                            viewModel.searchText = ""
-                            viewModel.resetResponseOffers()
-                            viewModel.getOffers()
-                        }
+                query?.let {
+                    if(it.isNotEmpty()) {
+                        viewModel.resetSearchResponse()
+                        viewModel.searchText = query
+                        viewModel.getDealsByTitle()
                     }
                 }
                 return false
             }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
+    }
+
+    private fun menuItemEvents() {
+        menuItem.setOnMenuItemClickListener(object : MenuItem.OnMenuItemClickListener {
+            override fun onMenuItemClick(item: MenuItem?): Boolean {
+                navController.navigate(R.id.action_fragmentsOffers_to_fragmentSearch)
+                return false
+            }
+
         })
 
-        searchView.setOnCloseListener (object: SearchView.OnCloseListener {
-            override fun onClose(): Boolean {
-                return false
+        menuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                navController.navigate(R.id.action_fragmentSearch_to_fragmentsOffers)
+                return true
             }
 
         })

@@ -38,7 +38,7 @@ class FragmentShowOfferDialog(val gameItem: GameItem) : DialogFragment() {
         setUpListView()
 
         binding.favorite.setOnClickListener { _ ->
-            val offerGame = viewModel.offersGame.value?.data?.filter { item -> item.gameID.equals(gameItem.gameId) }
+            val offerGame = viewModel.dealsGames.value?.data?.filter { item -> item.gameID.equals(gameItem.gameId) }
             if(offerGame?.size!! > 0) {
                 viewModel.saveGame(offerGame[0])
                 Snackbar.make(view, "The game saved successfully", Snackbar.LENGTH_SHORT).show()
@@ -48,7 +48,7 @@ class FragmentShowOfferDialog(val gameItem: GameItem) : DialogFragment() {
     }
 
     fun setUpListView() = binding.distributorList.apply {
-        adapter = GameDealersAdapter(requireContext(),gameItem.deals, viewModel)
+        adapter = GameDealersAdapter(requireContext(),gameItem.deals)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
