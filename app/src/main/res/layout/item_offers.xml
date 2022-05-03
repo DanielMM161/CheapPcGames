@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <ImageView
             android:id="@+id/image"
@@ -37,7 +37,11 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="2"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:text="@{offer.title}"
                     tools:text="Name" />
 
@@ -45,18 +49,20 @@
                     android:id="@+id/logo"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
+                    android:layout_alignParentStart="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="16dp"
                     android:contentDescription="@string/logostore"
-                    app:logoUrl="@{offer.storeItem.images.logo}"/>
+                    app:logoUrl="@{offer.storeItem.images.logo}" />
 
                 <TextView
                     android:id="@+id/normal_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/name"
-                    android:layout_marginEnd="8dp"
                     android:layout_toStartOf="@+id/discount"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="@{offer.normalPrice}"
                     tools:text="15$" />
 
@@ -65,6 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/normal_price"
+                    android:layout_alignParentBottom="true"
                     android:layout_toStartOf="@+id/discount"
                     android:layout_marginEnd="8dp"
                     android:text="@{offer.salePrice}"
@@ -72,15 +79,16 @@
 
                 <TextView
                     android:id="@+id/discount"
-                    textSaving="@{offer.savings}"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentEnd="true"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/name"
                     android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:background="?attr/colorPrimary"
                     android:gravity="center"
-                    android:textAlignment="center"
+                    android:background="@drawable/reactangle"
+                    textSaving="@{offer.savings}"
                     tools:text="91%" />
 
         </RelativeLayout>
