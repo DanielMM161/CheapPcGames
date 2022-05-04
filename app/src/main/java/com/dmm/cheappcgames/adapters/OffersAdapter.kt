@@ -41,7 +41,6 @@ class OffersAdapter() : RecyclerView.Adapter<OffersAdapter.OfferViewHolder>() {
     private var onItemClickListener: ((Offer) -> Unit)? = null
 
     override fun onBindViewHolder(holder: OfferViewHolder, position: Int) {
-        Log.e("OFFERS ADAPTER -----> ", "${getItemCount()}")
         val item = differ.currentList[position]
         holder.itemView.apply {
            setOnClickListener {
