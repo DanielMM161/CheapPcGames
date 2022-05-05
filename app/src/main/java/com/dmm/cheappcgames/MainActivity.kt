@@ -78,6 +78,14 @@ class MainActivity : AppCompatActivity() {
                     hiddeBottomNavigation()
                     viewModel.resetSearchResponse()
                 }
+                R.id.fragmentShowGame -> {
+                    setTitleMateriaToolbar(R.string.fragment_show_game)
+                    hiddeBottomNavigation()
+                    setVisibilityMenuItem(false)
+                }
+                R.id.fragmentDealWebview -> {
+                    hiddeBottomNavigation()
+                }
             }
         }
     }

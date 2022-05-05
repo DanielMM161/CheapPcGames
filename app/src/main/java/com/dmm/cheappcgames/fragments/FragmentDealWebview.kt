@@ -14,7 +14,7 @@ class FragmentDealWebview : Fragment(R.layout.fragment_deal_webview) {
     private lateinit var _binding: FragmentDealWebviewBinding
     private val binding get() = _binding!!
 
-    private val args: FragmentDealWebviewArgs by navArgs()
+   private val args: FragmentDealWebviewArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

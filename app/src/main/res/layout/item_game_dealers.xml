@@ -31,18 +31,21 @@
             android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             app:imageUrl="@{constants.BASE_URL_LOGO+store.images.logo}" />
 
         <TextView
             android:id="@+id/deal_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="20dp"
             android:layout_toStartOf="@+id/price"
             android:layout_toEndOf="@+id/logo"
-            android:text="@{store.storeName}" />
+            android:layout_centerInParent="true"
+            android:textAlignment="center"
+            android:text="@{store.storeName}"
+            tools:text="Dealer Name"/>
 
         <TextView
             android:id="@+id/price"
@@ -54,6 +57,7 @@
             android:gravity="center"
             android:text="@{deal.price}"
             android:textAlignment="center"
+            android:layout_alignParentBottom="true"
             android:textColor="@color/white"
             tools:text="0.88$" />
 

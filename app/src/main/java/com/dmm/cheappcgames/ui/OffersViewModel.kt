@@ -3,6 +3,7 @@ package com.dmm.cheappcgames.ui
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dmm.cheappcgames.data.Deal
 import com.dmm.cheappcgames.data.GameItem
 import com.dmm.cheappcgames.data.Offer
 import com.dmm.cheappcgames.data.StoreItem
@@ -71,10 +72,10 @@ class OffersViewModel(
         _dealsGames.value = handleDealsGamesResponse(response)
     }
 
-    fun getGameById(id: Int) = viewModelScope.launch {
+    fun getGameById(gameId: Int, storeId: String) = viewModelScope.launch {
         _gameId.value = Resource.Loading()
-        val response = repository.getGameById(id)
-        _gameId.value = handleGameById(response, id.toString())
+        val response = repository.getGameById(gameId)
+        _gameId.value = handleGameById(response, storeId)
         _gameId.value = Resource.Pause()
     }
 
@@ -151,17 +152,16 @@ class OffersViewModel(
         return gamesStores
     }
 
-    private fun handleGameById(response: Response<GameItem>, id: String) : Resource<GameItem> {
+    private fun handleGameById(response: Response<GameItem>, storeId: String) : Resource<GameItem> {
         if(response.isSuccessful) {
             response.body()?.let { resResult ->
                 resResult.deals.forEach { item ->
-                    val storeId = item.storeID
-                    val store =  _gamesStores.find { store -> store.storeID == storeId }
+                    val store =  _gamesStores.find { store -> store.storeID == item.storeID }
                     store?.let {
                         item.storeItem = it
                     }
                 }
-                return Resource.Success(resResult.copy(gameId = id))
+                return Resource.Success(resResult.copy(storeId = storeId))
             }
         }
         return Resource.Error(response.message())

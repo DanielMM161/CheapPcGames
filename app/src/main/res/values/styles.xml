@@ -13,4 +13,12 @@
         <item name="itemTextColor">@color/black</item>
     </style>
 
+    <!-- Divider style -->
+    <style name="Divider" parent="">
+        <item name="android:background">?attr/dividerHorizontal</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="color">@color/black</item>
+    </style>
+
 </resources>

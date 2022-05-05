@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_fragmentsOffers_to_fragmentSearch"
             app:destination="@id/fragmentSearch" />
+        <action
+            android:id="@+id/action_fragmentsOffers_to_fragmentShowGame"
+            app:destination="@id/fragmentShowGame" />
     </fragment>
     <fragment
         android:id="@+id/fragmentFilter"
@@ -40,5 +43,24 @@
         <action
             android:id="@+id/action_fragmentSearch_to_fragmentsOffers"
             app:destination="@id/fragmentsOffers" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentShowGame"
+        android:name="com.dmm.cheappcgames.fragments.FragmentShowGame"
+        android:label="FragmentShowGame" >
+        <argument
+            android:name="game"
+            app:argType="com.dmm.cheappcgames.data.GameItem" />
+        <action
+            android:id="@+id/action_fragmentShowGame_to_fragmentDealWebview"
+            app:destination="@id/fragmentDealWebview" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentDealWebview"
+        android:name="com.dmm.cheappcgames.fragments.FragmentDealWebview"
+        android:label="FragmentDealWebview" >
+        <argument
+            android:name="dealId"
+            app:argType="string" />
     </fragment>
 </navigation>

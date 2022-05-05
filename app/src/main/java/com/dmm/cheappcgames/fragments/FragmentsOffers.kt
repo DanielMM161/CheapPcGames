@@ -151,8 +151,11 @@ class FragmentsOffers() : Fragment() {
             when(it) {
                 is Resource.Success -> {
                     it.data?.let { game ->
-                        showDialog(game)
                         hiddenProgressBar()
+                        val bundle = Bundle().apply {
+                            putSerializable("game", game)
+                        }
+                        findNavController().navigate(R.id.action_fragmentsOffers_to_fragmentShowGame, bundle)
                     }
                 }
                 is Resource.Loading -> {
@@ -167,8 +170,9 @@ class FragmentsOffers() : Fragment() {
     }
 
     private fun itemClickListener() = offersAdapter.setOnItemClickListener {
-        val id = it.gameID.toInt()
-        viewModel.getGameById(id)
+        val gameId = it.gameID.toInt()
+        val storeId = it.storeID
+        viewModel.getGameById(gameId, storeId)
     }
 
 }

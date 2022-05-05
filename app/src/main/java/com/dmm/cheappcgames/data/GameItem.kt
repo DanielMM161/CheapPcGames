@@ -1,8 +1,10 @@
 package com.dmm.cheappcgames.data
 
+import java.io.Serializable
+
 data class GameItem(
-    val gameId: String,
+    val storeId: String,
     val cheapestPriceEver: CheapestPriceEver,
     val deals: List<Deal>,
     val info: Info
-)
+) : Serializable
