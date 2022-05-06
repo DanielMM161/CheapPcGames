@@ -23,4 +23,6 @@
     <string name="delete_game">%s was delete</string>
     <string name="undo">Undo</string>
     <string name="others_dealers">Others Dealers</string>
+    <string name="empty_favorite_list_title">Build a Favorite List</string>
+    <string name="empty_favorite_list_description">Add games to your Favoritelist by selecting games manually</string>
 </resources>

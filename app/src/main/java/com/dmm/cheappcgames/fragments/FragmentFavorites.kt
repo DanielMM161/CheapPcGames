@@ -61,6 +61,7 @@ class FragmentFavorites() : Fragment() {
                     setAnchorView(bottomview)
                     show()
                 }
+
             }
         }
 
@@ -70,6 +71,8 @@ class FragmentFavorites() : Fragment() {
 
         viewModel.getFavoritesGames().observe(viewLifecycleOwner) { it ->
             offersAdapter.differ.submitList(it)
+            // Show or Hidde empty Layout
+            binding.emptyListLayout.visibility = if(it.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 
@@ -78,5 +81,4 @@ class FragmentFavorites() : Fragment() {
         adapter = offersAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
-
 }
