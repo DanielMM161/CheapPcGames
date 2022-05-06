@@ -1,5 +1,7 @@
 package com.dmm.cheappcgames.binding
 
+import android.text.SpannableString
+import android.text.style.StrikethroughSpan
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.net.toUri
@@ -44,4 +46,11 @@ object BindingOffers {
         textView.text = "$savings%"
     }
 
+    @BindingAdapter("textNormalPrice")
+    @JvmStatic
+    fun bindTextNormalPrice(textView: TextView, text: String) {
+        val spannable = SpannableString(text)
+        spannable.setSpan(StrikethroughSpan(), 0, spannable.length, 0)
+        textView.text = spannable
+    }
 }

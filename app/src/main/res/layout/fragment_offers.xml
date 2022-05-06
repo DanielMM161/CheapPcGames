@@ -16,7 +16,7 @@
             android:scrollbars="vertical"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/filter"
@@ -33,12 +33,12 @@
 
         <ProgressBar
             android:id="@+id/paginationProgressbar"
+            style="?attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
-            style="?attr/progressBarStyle"
             android:background="@color/transparent"
             android:indeterminateTint="?attr/colorPrimary"
             android:visibility="invisible" />

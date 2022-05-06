@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="150dp"
-            android:layout_height="70dp"
+            android:layout_width="160dp"
+            android:layout_height="90dp"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:background="@drawable/gradient_layout"
@@ -29,7 +29,7 @@
 
             <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="90dp"
             android:layout_gravity="end"
             android:layout_marginStart="8dp">
 
@@ -42,28 +42,40 @@
                     android:layout_alignParentEnd="true"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    style="@style/NameGame"
                     android:text="@{offer.title}"
                     tools:text="Name" />
 
+                <TextView
+                    android:id="@+id/store_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/name"
+                    android:layout_alignParentStart="true"
+                    android:textSize="12sp"
+                    android:text="@{offer.storeItem.storeName}"
+                    tools:text="Store Name" />
+
                 <ImageView
                     android:id="@+id/logo"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/store_name"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginTop="16dp"
                     android:contentDescription="@string/logostore"
+                    android:scaleType="centerInside"
                     app:logoUrl="@{offer.storeItem.images.logo}" />
 
                 <TextView
                     android:id="@+id/normal_price"
+                    textNormalPrice="@{offer.normalPrice}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/name"
-                    android:layout_toStartOf="@+id/discount"
-                    android:layout_marginEnd="8dp"
+                    android:layout_below="@+id/store_name"
                     android:layout_marginTop="8dp"
-                    android:text="@{offer.normalPrice}"
+                    android:layout_marginEnd="8dp"
+                    android:layout_toStartOf="@+id/discount"
                     tools:text="15$" />
 
                 <TextView
@@ -72,22 +84,24 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/normal_price"
                     android:layout_alignParentBottom="true"
-                    android:layout_toStartOf="@+id/discount"
                     android:layout_marginEnd="8dp"
-                    android:text="@{offer.salePrice}"
+                    android:layout_toStartOf="@+id/discount"
+                    style="@style/Discount"
+                    android:text="@{offer.salePrice.equals(`0.00`) ? @string/free_game : offer.salePrice}"
                     tools:text="8$" />
 
                 <TextView
                     android:id="@+id/discount"
                     android:layout_width="60dp"
                     android:layout_height="30dp"
-                    android:layout_below="@+id/name"
-                    android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/store_name"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:background="@color/red"
+                    style="@style/Discount"
                     android:gravity="center"
-                    android:background="@drawable/reactangle"
                     textSaving="@{offer.savings}"
                     tools:text="91%" />
 

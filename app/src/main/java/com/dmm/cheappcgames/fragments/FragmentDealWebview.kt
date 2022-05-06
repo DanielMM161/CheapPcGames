@@ -2,6 +2,7 @@ package com.dmm.cheappcgames.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -24,8 +25,13 @@ class FragmentDealWebview : Fragment(R.layout.fragment_deal_webview) {
             val url = "${REDIRECT_URL+it}"
             binding.webView.settings.javaScriptEnabled = true
             binding.webView.apply {
-                webViewClient = WebViewClient()
+                webViewClient = object : WebViewClient() {
+                    override fun onPageFinished(view: WebView, url: String) {
+                        binding.progressbar.visibility = View.INVISIBLE
+                    }
+                }
                 loadUrl(url)
+
             }
         }
 

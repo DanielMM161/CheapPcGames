@@ -118,11 +118,6 @@ class FragmentsOffers() : Fragment() {
         isLoading = true
     }
 
-    private fun showDialog(gameItem: GameItem) {
-        val dialog = FragmentShowOfferDialog(gameItem)
-        dialog.show(parentFragmentManager, "showOffer")
-    }
-
     private suspend fun subscribeObservableDeals() = viewModel.dealsGames.collect {
         showProgressBar()
         when(it) {

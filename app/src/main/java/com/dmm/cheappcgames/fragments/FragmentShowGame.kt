@@ -45,6 +45,10 @@ class FragmentShowGame : Fragment(R.layout.fragment_show_game) {
                 Snackbar.make(view, "The game saved successfully", Snackbar.LENGTH_SHORT).show()
             }
         }
+
+        binding.mainDealerLayout.setOnClickListener {
+            goFragmentDealWebview(mainDealer.dealID)
+        }
     }
 
     private fun setupListView() {
@@ -57,8 +61,12 @@ class FragmentShowGame : Fragment(R.layout.fragment_show_game) {
     }
 
     private fun itemClickListener() = gameDealersAdapter.setOnItemClickListener {
+        goFragmentDealWebview(it)
+    }
+
+    private fun goFragmentDealWebview(dealId: String) {
         val bundle = Bundle().apply {
-            putString("dealId", it)
+            putString("dealId", dealId)
         }
         findNavController().navigate(R.id.action_fragmentShowGame_to_fragmentDealWebview, bundle)
     }
