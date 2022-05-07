@@ -21,13 +21,14 @@
         <ProgressBar
             android:id="@+id/paginationProgressbar"
             style="?attr/progressBarStyle"
-            android:background="@color/transparent"
-            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:background="@color/transparent"
+            android:indeterminateTint="?attr/colorPrimary"
+            android:visibility="visible" />
 
     </RelativeLayout>
 

@@ -41,7 +41,7 @@
             android:layout_centerInParent="true"
             android:background="@color/transparent"
             android:indeterminateTint="?attr/colorPrimary"
-            android:visibility="invisible" />
+            android:visibility="visible" />
 
     </RelativeLayout>
 

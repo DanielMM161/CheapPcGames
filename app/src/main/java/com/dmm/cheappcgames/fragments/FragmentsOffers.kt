@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dmm.cheappcgames.MainActivity
 import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.OffersAdapter
-import com.dmm.cheappcgames.data.GameItem
 import com.dmm.cheappcgames.databinding.FragmentOffersBinding
 import com.dmm.cheappcgames.resource.Resource
 import com.dmm.cheappcgames.ui.OffersViewModel
@@ -130,6 +129,7 @@ class FragmentsOffers() : Fragment() {
                     isLastPage = viewModel.dealsPage == totalPages
                     hiddenProgressBar()
                 }
+
             }
             is Resource.Loading -> {
                 showProgressBar()
@@ -137,7 +137,6 @@ class FragmentsOffers() : Fragment() {
             is Resource.Error -> {
                 hiddenProgressBar()
             }
-            else -> { hiddenProgressBar() }
         }
     }
 
@@ -159,7 +158,6 @@ class FragmentsOffers() : Fragment() {
                 is Resource.Error -> {
                     hiddenProgressBar()
                 }
-                else -> { hiddenProgressBar() }
             }
         }
     }
