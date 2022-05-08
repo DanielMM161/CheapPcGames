@@ -1,4 +1,4 @@
-package com.dmm.cheappcgames.ui
+package com.dmm.cheappcgames.repository
 
 import com.dmm.cheappcgames.data.Offer
 import com.dmm.cheappcgames.db.CheapPcDataBase

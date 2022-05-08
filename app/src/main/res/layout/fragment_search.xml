@@ -5,7 +5,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="fragments.FragmentSearch">
+        tools:context=".ui.fragments.FragmentSearch">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_search_deals"
@@ -28,7 +28,7 @@
             android:layout_centerInParent="true"
             android:background="@color/transparent"
             android:indeterminateTint="?attr/colorPrimary"
-            android:visibility="visible" />
+            android:visibility="invisible" />
 
     </RelativeLayout>
 

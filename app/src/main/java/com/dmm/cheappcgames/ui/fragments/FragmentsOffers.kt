@@ -1,4 +1,4 @@
-package com.dmm.cheappcgames.fragments
+package com.dmm.cheappcgames.ui.fragments
 
 import android.os.Bundle
 import android.view.*
@@ -10,13 +10,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dmm.cheappcgames.MainActivity
 import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.OffersAdapter
 import com.dmm.cheappcgames.databinding.FragmentOffersBinding
 import com.dmm.cheappcgames.resource.Resource
+import com.dmm.cheappcgames.ui.DealsActivity
 import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.utils.Constants.Companion.QUERY_PAGE_SIZE
+import com.dmm.cheappcgames.utils.Utils
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -39,7 +40,7 @@ class FragmentsOffers() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentOffersBinding.bind(view)
-        viewModel = (activity as MainActivity).viewModel
+        viewModel = (activity as DealsActivity).viewModel
         setUpRecyclerView()
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -82,7 +83,6 @@ class FragmentsOffers() : Fragment() {
             } else {
                 binding.rvOffers.setPadding(0, 0, 0, 0)
             }
-
         }
 
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -125,9 +125,12 @@ class FragmentsOffers() : Fragment() {
                     offersAdapter.differ.submitList(offers)
                     //Temporal Solution
                     offersAdapter.notifyItemRangeChanged(0, offers.size)
+
                     val totalPages = offers.size / QUERY_PAGE_SIZE + 2
                     isLastPage = viewModel.dealsPage == totalPages
+
                     hiddenProgressBar()
+
                 }
 
             }
@@ -136,9 +139,19 @@ class FragmentsOffers() : Fragment() {
             }
             is Resource.Error -> {
                 hiddenProgressBar()
+                it.message?.let { message ->
+                    Utils.showToast(requireContext(), "An error occured: $message")
+                }
+            }
+            is Resource.ErrorCaught -> {
+                hiddenProgressBar()
+                val message = it.asString(requireContext())
+                Utils.showToast(requireContext(), "$message")
             }
         }
     }
+
+
 
     private suspend fun subscribeObservableGameId() {
         viewModel.gameId.collect {
@@ -157,6 +170,14 @@ class FragmentsOffers() : Fragment() {
                 }
                 is Resource.Error -> {
                     hiddenProgressBar()
+                    it.message?.let { message ->
+                        Utils.showToast(requireContext(), "An error occured: $message")
+                    }
+                }
+                is Resource.ErrorCaught -> {
+                    hiddenProgressBar()
+                    val message = it.asString(requireContext())
+                    Utils.showToast(requireContext(), "$message")
                 }
             }
         }

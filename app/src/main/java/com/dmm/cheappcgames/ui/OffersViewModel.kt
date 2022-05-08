@@ -1,20 +1,29 @@
 package com.dmm.cheappcgames.ui
 
+import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.ConnectivityManager.*
+import android.net.NetworkCapabilities.*
+import android.os.Build
 import android.view.View
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.dmm.cheappcgames.data.Deal
+import com.dmm.cheappcgames.DealsApplication
+import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.data.GameItem
 import com.dmm.cheappcgames.data.Offer
 import com.dmm.cheappcgames.data.StoreItem
+import com.dmm.cheappcgames.repository.OffersRepository
 import com.dmm.cheappcgames.resource.Resource
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class OffersViewModel(
+    app: Application,
     private val repository: OffersRepository
-) : ViewModel() {
+) : AndroidViewModel(app) {
 
     private var _dealsGames = MutableStateFlow<Resource<List<Offer>>>(Resource.Loading())
     val dealsGames = _dealsGames.asStateFlow()
@@ -47,18 +56,36 @@ class OffersViewModel(
     }
 
     private fun getStores() = viewModelScope.launch {
-        val response = repository.getStores()
-        _gamesStores = handleGamesStores(response)
-        if(_gamesStores.isNotEmpty()) {
-            getDeals()
+        if(hasInternetConnection()) {
+            val response = repository.getStores()
+            _gamesStores = handleGamesStores(response)
+            if(_gamesStores.isNotEmpty()) {
+                getDeals()
+            }
+        } else {
+            _dealsGames.value = Resource.ErrorCaught(resId = R.string.offline)
         }
     }
 
     fun getDealsByTitle() = viewModelScope.launch {
-        _dealsGamesSearch.value = Resource.Loading()
-        val response = repository.getDealsByTitle(dealsPageSearch, searchText)
-        _dealsGamesSearch.value = handleDealsGamesSearchResponse(response)
-        _dealsGamesSearch.value = Resource.Pause()
+        if(hasInternetConnection()) {
+            _dealsGamesSearch.value = Resource.Loading()
+            val response = repository.getDealsByTitle(dealsPageSearch, searchText)
+            _dealsGamesSearch.value = handleDealsGamesSearchResponse(response)
+            _dealsGamesSearch.value = Resource.Pause()
+        } else {
+            _dealsGamesSearch.value = Resource.ErrorCaught(resId = R.string.offline)
+        }
+    }
+
+    fun handleDealsByTitle(query: String) {
+        if(hasInternetConnection()) {
+            resetSearchResponse()
+            searchText = query
+            getDealsByTitle()
+        } else {
+            _dealsGamesSearch.value = Resource.ErrorCaught(resId = R.string.offline)
+        }
     }
 
     private fun getFilteredDeals() = viewModelScope.launch {
@@ -74,17 +101,27 @@ class OffersViewModel(
 
     fun getGameById(gameId: Int, storeId: String) = viewModelScope.launch {
         _gameId.value = Resource.Loading()
-        val response = repository.getGameById(gameId)
-        _gameId.value = handleGameById(response, storeId)
-        _gameId.value = Resource.Pause()
+        if(hasInternetConnection()) {
+            val response = repository.getGameById(gameId)
+            _gameId.value = handleGameById(response, storeId)
+            _gameId.value = Resource.Pause()
+        } else {
+            _gameId.value = Resource.ErrorCaught(resId = R.string.offline)
+        }
+
     }
 
     fun dealsHandler() {
-         if(storesSelectedList.size > 0) {
-            getFilteredDeals()
+        if(hasInternetConnection()) {
+            if(storesSelectedList.size > 0) {
+                getFilteredDeals()
+            } else {
+                getDeals()
+            }
         } else {
-            getDeals()
+            _dealsGames.value = Resource.ErrorCaught(resId = R.string.offline)
         }
+
     }
 
     fun saveGame(game: Offer) = viewModelScope.launch {
@@ -180,5 +217,31 @@ class OffersViewModel(
     fun handleOnClickMaterial(view: View, storeItem: StoreItem) {
         view.isSelected = !view.isSelected
         if(view.isSelected) storesSelectedList.add(storeItem.storeID) else storesSelectedList.remove(storeItem.storeID)
+    }
+
+    fun hasInternetConnection(): Boolean {
+        val connectivityManager = getApplication<DealsApplication>().getSystemService(
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val activeNetwork = connectivityManager.activeNetwork ?: return false
+            val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
+            return when {
+                capabilities.hasTransport(TRANSPORT_WIFI) -> return true
+                capabilities.hasTransport(TRANSPORT_CELLULAR) -> return true
+                capabilities.hasTransport(TRANSPORT_ETHERNET) -> return true
+                else -> return false
+            }
+        } else {
+            connectivityManager.activeNetworkInfo?.run {
+                return when(type) {
+                    TYPE_WIFI -> return true
+                    TYPE_MOBILE -> return true
+                    TYPE_ETHERNET -> return true
+                    else -> return false
+                }
+            }
+        }
+        return false
     }
 }

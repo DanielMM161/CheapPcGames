@@ -5,7 +5,7 @@
     app:startDestination="@id/fragmentsOffers">
     <fragment
         android:id="@+id/fragmentsOffers"
-        android:name="com.dmm.cheappcgames.fragments.FragmentsOffers"
+        android:name="com.dmm.cheappcgames.ui.fragments.FragmentsOffers"
         android:label="FragmentsOffers" >
         <action
             android:id="@+id/action_fragmentsOffers_to_fragmentFilter"
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentFilter"
-        android:name="com.dmm.cheappcgames.fragments.FragmentFilter"
+        android:name="com.dmm.cheappcgames.ui.fragments.FragmentFilter"
         android:label="FragmentFilter" >
         <action
             android:id="@+id/action_fragmentFilter_to_fragmentsOffers"
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentFavorites"
-        android:name="com.dmm.cheappcgames.fragments.FragmentFavorites"
+        android:name="com.dmm.cheappcgames.ui.fragments.FragmentFavorites"
         android:label="FragmentFavorites" >
         <action
             android:id="@+id/action_fragmentFavorites_to_fragmentsOffers"
@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentSearch"
-        android:name="com.dmm.cheappcgames.fragments.FragmentSearch"
+        android:name="com.dmm.cheappcgames.ui.fragments.FragmentSearch"
         android:label="FragmentSearch" >
         <action
             android:id="@+id/action_fragmentSearch_to_fragmentsOffers"
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentShowGame"
-        android:name="com.dmm.cheappcgames.fragments.FragmentShowGame"
+        android:name="com.dmm.cheappcgames.ui.fragments.FragmentShowGame"
         android:label="FragmentShowGame" >
         <argument
             android:name="game"
@@ -57,7 +57,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentDealWebview"
-        android:name="com.dmm.cheappcgames.fragments.FragmentDealWebview"
+        android:name="com.dmm.cheappcgames.ui.fragments.FragmentDealWebview"
         android:label="FragmentDealWebview" >
         <argument
             android:name="dealId"

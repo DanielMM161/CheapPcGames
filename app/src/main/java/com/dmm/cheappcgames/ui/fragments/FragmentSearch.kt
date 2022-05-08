@@ -1,4 +1,4 @@
-package com.dmm.cheappcgames.fragments
+package com.dmm.cheappcgames.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,13 +11,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dmm.cheappcgames.MainActivity
 import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.OffersAdapter
 import com.dmm.cheappcgames.databinding.FragmentSearchBinding
 import com.dmm.cheappcgames.resource.Resource
+import com.dmm.cheappcgames.ui.DealsActivity
 import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.utils.Constants
+import com.dmm.cheappcgames.utils.Utils
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -40,7 +41,7 @@ class FragmentSearch : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSearchBinding.bind(view)
-        viewModel = (activity as MainActivity).viewModel
+        viewModel = (activity as DealsActivity).viewModel
         setupRecyclerView()
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -74,7 +75,6 @@ class FragmentSearch : Fragment() {
             } else {
                 binding.rvSearchDeals.setPadding(0, 0, 0, 0)
             }
-
         }
 
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -103,6 +103,14 @@ class FragmentSearch : Fragment() {
                 }
                 is Resource.Error -> {
                     hiddenProgressBar()
+                    it.message?.let { message ->
+                        Utils.showToast(requireContext(), "An error occured: $message")
+                    }
+                }
+                is Resource.ErrorCaught -> {
+                    hiddenProgressBar()
+                    val message = it.asString(requireContext())
+                    Utils.showToast(requireContext(), "$message")
                 }
             }
         }

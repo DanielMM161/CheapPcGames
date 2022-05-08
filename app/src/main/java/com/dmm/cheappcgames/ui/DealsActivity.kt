@@ -1,4 +1,4 @@
-package com.dmm.cheappcgames
+package com.dmm.cheappcgames.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,15 +10,14 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.databinding.ActivityMainBinding
 import com.dmm.cheappcgames.db.CheapPcDataBase
-import com.dmm.cheappcgames.ui.OffersRepository
-import com.dmm.cheappcgames.ui.OffersViewModel
-import com.dmm.cheappcgames.ui.ViewModelFactory
+import com.dmm.cheappcgames.repository.OffersRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Job
 
-class MainActivity : AppCompatActivity() {
+class DealsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     lateinit var viewModel: OffersViewModel
@@ -34,14 +33,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val offersRepository = OffersRepository(CheapPcDataBase(this))
-        val viewModelProviderFactory = ViewModelFactory(offersRepository)
+        val viewModelProviderFactory = ViewModelFactory(application,offersRepository)
         viewModel = ViewModelProvider(this, viewModelProviderFactory).get(OffersViewModel::class.java)
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.fragmentsOffers, R.id.fragmentFavorites))
+        val appBarConfiguration = AppBarConfiguration(setOf(
+            R.id.fragmentsOffers,
+            R.id.fragmentFavorites
+        ))
 
         binding.materialToolbar.setupWithNavController(navController, appBarConfiguration)
         binding.bottomNavigation.setupWithNavController(navController)
@@ -52,10 +54,10 @@ class MainActivity : AppCompatActivity() {
 
         destinationChangedListener()
         menuItemEvents()
-        searchViewEvents()
+        searchListener()
     }
 
-    fun destinationChangedListener() {
+    private fun destinationChangedListener() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             showBottomNavigation()
             when(destination.id) {
@@ -106,15 +108,12 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.visibility = View.GONE
     }
 
-    fun searchViewEvents() {
-        var job: Job? = null
+    fun searchListener() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
                     if(it.isNotEmpty()) {
-                        viewModel.resetSearchResponse()
-                        viewModel.searchText = query
-                        viewModel.getDealsByTitle()
+                        viewModel.handleDealsByTitle(query)
                     }
                 }
                 return false

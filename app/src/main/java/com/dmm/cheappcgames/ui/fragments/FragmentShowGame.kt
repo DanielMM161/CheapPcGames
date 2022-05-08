@@ -1,17 +1,18 @@
-package com.dmm.cheappcgames.fragments
+package com.dmm.cheappcgames.ui.fragments
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.dmm.cheappcgames.MainActivity
 import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.GameDealersAdapter
 import com.dmm.cheappcgames.data.Deal
 import com.dmm.cheappcgames.data.GameItem
 import com.dmm.cheappcgames.databinding.FragmentShowGameBinding
+import com.dmm.cheappcgames.ui.DealsActivity
 import com.dmm.cheappcgames.ui.OffersViewModel
+import com.dmm.cheappcgames.utils.Utils
 import com.google.android.material.snackbar.Snackbar
 
 class FragmentShowGame : Fragment(R.layout.fragment_show_game) {
@@ -29,7 +30,7 @@ class FragmentShowGame : Fragment(R.layout.fragment_show_game) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentShowGameBinding.bind(view)
-        viewModel = (activity as MainActivity).viewModel
+        viewModel = (activity as DealsActivity).viewModel
         game = args.game
         mainDealer = game.deals.find { deal -> deal.storeID == game.storeId }!!
         setupListView()
@@ -65,10 +66,14 @@ class FragmentShowGame : Fragment(R.layout.fragment_show_game) {
     }
 
     private fun goFragmentDealWebview(dealId: String) {
-        val bundle = Bundle().apply {
-            putString("dealId", dealId)
+        if(viewModel.hasInternetConnection()) {
+            val bundle = Bundle().apply {
+                putString("dealId", dealId)
+            }
+            findNavController().navigate(R.id.action_fragmentShowGame_to_fragmentDealWebview, bundle)
+        } else {
+            Utils.showToast(requireContext(), "You're offline")
         }
-        findNavController().navigate(R.id.action_fragmentShowGame_to_fragmentDealWebview, bundle)
     }
 
 }

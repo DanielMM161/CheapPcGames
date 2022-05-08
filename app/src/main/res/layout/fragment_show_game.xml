@@ -144,7 +144,6 @@
                 android:layout_marginEnd="28dp"
                 android:layout_marginBottom="28dp"
                 android:backgroundTint="?attr/colorPrimary"
-                android:contentDescription="@string/filter"
                 android:elevation="10dp"
                 android:src="@drawable/ic_baseline_favorite_border_24" />
 

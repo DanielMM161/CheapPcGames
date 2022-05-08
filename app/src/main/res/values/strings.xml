@@ -1,28 +1,38 @@
 <resources>
     <string name="app_name">CheapPcGames</string>
-    <string name="textFilter">Distributor</string>
-    <string name="cancel">Cancel</string>
-    <string name="filter">Filter</string>
-    <string name="search">Search…</string>
-    <string name="savings">%s %</string>
-    <string name="save">Save</string>
 
-    <!-- Fragment Titles-->
+    <!-- Titles Fragment -->
     <string name="fragment_offers">All Offers</string>
     <string name="fragment_filter">Filter</string>
     <string name="fragment_favorites">Favorites</string>
     <string name="fragment_show_game">Detail Game</string>
 
+    <!-- General -->
     <string name="descriptionImage">image of the game %s</string>
+    <string name="logostore">logo store of the game</string>
+
+    <!-- Titles Bottom Navigation -->
     <string name="all_offers">All offers</string>
     <string name="favorites">Favorites</string>
-    <string name="logostore">logo store of the game</string>
-    <string name="free_game">FREE!!</string>
 
-    <!-- SnackBar Message-->
+    <!-- SnackBar Message -->
     <string name="delete_game">%s was delete</string>
     <string name="undo">Undo</string>
+
+    <!-- Fragment Show Game -->
     <string name="others_dealers">Others Dealers</string>
+
+    <!-- Fragment Favorites -->
     <string name="empty_favorite_list_title">Build a Favorite List</string>
     <string name="empty_favorite_list_description">Add games to your Favoritelist by selecting games manually</string>
+
+    <!-- Fragment Offers -->
+    <string name="free_game">FREE!!</string>
+    <string name="filter">Filter</string>
+
+    <!-- Fragment Filter -->
+    <string name="textFilter">Distributor</string>
+
+    <!-- Error Message -->
+    <string name="offline">No internet connection</string>
 </resources>

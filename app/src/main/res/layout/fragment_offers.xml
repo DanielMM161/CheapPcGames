@@ -5,7 +5,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="fragments.FragmentsOffers">
+        tools:context=".ui.fragments.FragmentsOffers">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvOffers"

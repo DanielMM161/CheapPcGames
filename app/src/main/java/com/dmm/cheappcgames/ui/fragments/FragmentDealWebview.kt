@@ -1,4 +1,4 @@
-package com.dmm.cheappcgames.fragments
+package com.dmm.cheappcgames.ui.fragments
 
 import android.os.Bundle
 import android.view.View
@@ -31,7 +31,6 @@ class FragmentDealWebview : Fragment(R.layout.fragment_deal_webview) {
                     }
                 }
                 loadUrl(url)
-
             }
         }
 
