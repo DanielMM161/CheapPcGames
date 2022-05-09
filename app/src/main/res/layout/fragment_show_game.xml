@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="java.util.List"/>
+
+        <variable
+            name="infoGame"
+            type="com.dmm.cheappcgames.data.Info" />
+
+        <variable
+            name="constants"
+            type="com.dmm.cheappcgames.utils.Constants" />
+
+        <variable
+            name="mainDealer"
+            type="com.dmm.cheappcgames.data.Deal" />
+
+        <variable
+            name="mainStoreItem"
+            type="com.dmm.cheappcgames.data.StoreItem" />
+    </data>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/image"
+            imageUrl="@{infoGame.thumb}"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/gradient_layout"
+            android:contentDescription="@{@string/descriptionImage(infoGame.title)}" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp"
+            android:layout_below="@+id/image">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@{infoGame.title}"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textStyle="bold"
+                tools:text="Name Game" />
+
+
+            <RelativeLayout
+                android:id="@+id/main_dealer_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/name" >
+
+                <ImageView
+                    android:id="@+id/logo_main_dealer"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_alignParentTop="true"
+                    imageUrl="@{constants.BASE_URL_LOGO+mainStoreItem.images.logo}"/>
+
+                <TextView
+                    android:id="@+id/name_main_dealer"
+                    style="@style/MainDealer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@+id/price_main_dealer"
+                    android:layout_toEndOf="@+id/logo_main_dealer"
+                    android:gravity="center"
+                    android:text="@{mainStoreItem.storeName}"
+                    tools:text="Name Dealer" />
+
+                <TextView
+                    android:id="@+id/price_main_dealer"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/black"
+                    android:gravity="center"
+                    android:text="@{`$`+mainDealer.price}"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    tools:text="0.88$" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/text_others_dealers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/main_dealer_layout"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                android:text="@string/others_dealers"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+
+            <View
+                android:id="@+id/divider"
+                style="@style/Divider"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_below="@+id/text_others_dealers"
+                android:layout_marginTop="5dp"/>
+
+            <ListView
+                android:id="@+id/dealers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/divider"
+                android:layout_marginTop="8dp"
+                android:scrollbars="vertical"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="28dp"
+                android:layout_marginBottom="28dp"
+                android:backgroundTint="?attr/colorPrimary"
+                android:elevation="10dp"
+                android:src="@drawable/ic_baseline_favorite_border_24" />
+
+
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

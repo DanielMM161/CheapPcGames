@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="offer"
+            type="com.dmm.cheappcgames.data.Offer" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="160dp"
+            android:layout_height="90dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:background="@drawable/gradient_layout"
+            android:layout_gravity="start"
+            android:contentDescription="@{@string/descriptionImage(offer.title)}"
+            app:imageUrl="@{offer.thumb}" />
+
+            <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_gravity="end"
+            android:layout_marginStart="8dp">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    style="@style/NameGame"
+                    android:text="@{offer.title}"
+                    tools:text="Name" />
+
+                <TextView
+                    android:id="@+id/store_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/name"
+                    android:layout_alignParentStart="true"
+                    android:textSize="12sp"
+                    android:text="@{offer.storeItem.storeName}"
+                    tools:text="Store Name" />
+
+                <ImageView
+                    android:id="@+id/logo"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/store_name"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:contentDescription="@string/logostore"
+                    android:scaleType="centerInside"
+                    app:logoUrl="@{offer.storeItem.images.logo}" />
+
+                <TextView
+                    android:id="@+id/normal_price"
+                    textNormalPrice="@{offer.normalPrice}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/store_name"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_toStartOf="@+id/discount"
+                    tools:text="15$" />
+
+                <TextView
+                    android:id="@+id/discount_price"
+                    style="@style/Discount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/normal_price"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="8dp"
+                    android:layout_toStartOf="@+id/discount"
+                    android:text="@{offer.salePrice.equals(`0.00`) ? @string/free_game : `$`+offer.salePrice}"
+                    tools:text="8$" />
+
+                <TextView
+                    android:id="@+id/discount"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/store_name"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/red"
+                    style="@style/Discount"
+                    android:gravity="center"
+                    textSaving="@{offer.savings}"
+                    tools:text="91%" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</layout>

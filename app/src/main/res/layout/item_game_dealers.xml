@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <import type="java.util.List"/>
+
+        <variable
+            name="constants"
+            type="com.dmm.cheappcgames.utils.Constants" />
+
+        <variable
+            name="deal"
+            type="com.dmm.cheappcgames.data.Deal" />
+
+        <variable
+            name="store"
+            type="com.dmm.cheappcgames.data.StoreItem" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            app:imageUrl="@{constants.BASE_URL_LOGO+store.images.logo}" />
+
+        <TextView
+            android:id="@+id/deal_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_toStartOf="@+id/price"
+            android:layout_toEndOf="@+id/logo"
+            style="@style/OthersDealers"
+            tools:text="Dealer Name"
+            android:text="@{store.storeName}"/>
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@color/black"
+            android:gravity="center"
+            android:text="@{`$`+deal.price}"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            tools:text="0.88$" />
+
+    </RelativeLayout>
+</layout>
