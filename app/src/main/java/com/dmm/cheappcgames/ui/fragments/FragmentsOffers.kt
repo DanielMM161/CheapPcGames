@@ -139,7 +139,7 @@ class FragmentsOffers() : Fragment() {
             }
             is Resource.Error -> {
                 hiddenProgressBar()
-                it.message?.let { message ->
+                it.message.let { message ->
                     Utils.showToast(requireContext(), "An error occured: $message")
                 }
             }
@@ -170,7 +170,7 @@ class FragmentsOffers() : Fragment() {
                 }
                 is Resource.Error -> {
                     hiddenProgressBar()
-                    it.message?.let { message ->
+                    it.message.let { message ->
                         Utils.showToast(requireContext(), "An error occured: $message")
                     }
                 }

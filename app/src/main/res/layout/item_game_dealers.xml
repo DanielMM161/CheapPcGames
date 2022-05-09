@@ -53,11 +53,11 @@
             android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:background="@color/black"
             android:gravity="center"
-            android:text="@{deal.price}"
+            android:text="@{`$`+deal.price}"
             android:textAlignment="center"
-            android:layout_alignParentBottom="true"
             android:textColor="@color/white"
             tools:text="0.88$" />
 

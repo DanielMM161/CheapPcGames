@@ -6,15 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.OffersAdapter
 import com.dmm.cheappcgames.databinding.FragmentFavoritesBinding
+import com.dmm.cheappcgames.resource.Resource
 import com.dmm.cheappcgames.ui.DealsActivity
 import com.dmm.cheappcgames.ui.OffersViewModel
+import com.dmm.cheappcgames.utils.Utils
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class FragmentFavorites() : Fragment() {
 
@@ -38,6 +46,14 @@ class FragmentFavorites() : Fragment() {
         viewModel = (activity as DealsActivity).viewModel
         val bottomview = (activity as DealsActivity).bottomNavigation
         setupRecyclerView()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    subscribeObservableGameId()
+                }
+            }
+        }
 
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
@@ -77,9 +93,56 @@ class FragmentFavorites() : Fragment() {
         }
     }
 
-    private fun setupRecyclerView() = binding.rvFavorites.apply {
-        offersAdapter = OffersAdapter()
-        adapter = offersAdapter
-        layoutManager = LinearLayoutManager(requireContext())
+    private fun setupRecyclerView() {
+        binding.rvFavorites.apply {
+            offersAdapter = OffersAdapter()
+            adapter = offersAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+        itemClickListener()
+    }
+
+    private fun itemClickListener() = offersAdapter.setOnItemClickListener {
+        val gameId = it.gameID.toInt()
+        val storeId = it.storeID
+        viewModel.getGameById(gameId, storeId)
+    }
+
+    private fun hiddenProgressBar() {
+        binding.progressbar.visibility = View.GONE
+    }
+
+    private fun showProgressBar() {
+        binding.progressbar.visibility = View.VISIBLE
+    }
+
+    private suspend fun subscribeObservableGameId() {
+        viewModel.gameId.collect {
+            when(it) {
+                is Resource.Success -> {
+                    it.data?.let { game ->
+                        hiddenProgressBar()
+                        val bundle = Bundle().apply {
+                            putSerializable("game", game)
+                        }
+                        findNavController().navigate(R.id.action_fragmentFavorites_to_fragmentShowGame, bundle)
+                    }
+                }
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+                is Resource.Error -> {
+                    hiddenProgressBar()
+                    it.message.let { message ->
+                        Utils.showToast(requireContext(), "An error occured: $message")
+                    }
+                }
+                is Resource.ErrorCaught -> {
+                    hiddenProgressBar()
+                    val message = it.asString(requireContext())
+                    Utils.showToast(requireContext(), "$message")
+                }
+            }
+        }
     }
 }

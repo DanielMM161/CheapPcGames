@@ -94,14 +94,14 @@
                     android:id="@+id/price_main_dealer"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginTop="8dp"
                     android:background="@color/black"
                     android:gravity="center"
+                    android:text="@{`$`+mainDealer.price}"
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:text="@{mainDealer.price}"
                     tools:text="0.88$" />
 
             </RelativeLayout>

@@ -80,14 +80,14 @@
 
                 <TextView
                     android:id="@+id/discount_price"
+                    style="@style/Discount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/normal_price"
                     android:layout_alignParentBottom="true"
                     android:layout_marginEnd="8dp"
                     android:layout_toStartOf="@+id/discount"
-                    style="@style/Discount"
-                    android:text="@{offer.salePrice.equals(`0.00`) ? @string/free_game : offer.salePrice}"
+                    android:text="@{offer.salePrice.equals(`0.00`) ? @string/free_game : `$`+offer.salePrice}"
                     tools:text="8$" />
 
                 <TextView

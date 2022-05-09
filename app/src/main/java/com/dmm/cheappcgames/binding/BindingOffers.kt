@@ -49,7 +49,7 @@ object BindingOffers {
     @BindingAdapter("textNormalPrice")
     @JvmStatic
     fun bindTextNormalPrice(textView: TextView, text: String) {
-        val spannable = SpannableString(text)
+        val spannable = SpannableString("$${text}")
         spannable.setSpan(StrikethroughSpan(), 0, spannable.length, 0)
         textView.text = spannable
     }
