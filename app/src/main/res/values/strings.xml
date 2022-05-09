@@ -6,6 +6,7 @@
     <string name="fragment_filter">Filter</string>
     <string name="fragment_favorites">Favorites</string>
     <string name="fragment_show_game">Detail Game</string>
+    <string name="fragment_webview">Web Page</string>
 
     <!-- General -->
     <string name="descriptionImage">image of the game %s</string>

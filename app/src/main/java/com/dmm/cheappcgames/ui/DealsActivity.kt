@@ -86,6 +86,7 @@ class DealsActivity : AppCompatActivity() {
                     setVisibilityMenuItem(false)
                 }
                 R.id.fragmentDealWebview -> {
+                    setTitleMateriaToolbar(R.string.fragment_webview)
                     hiddeBottomNavigation()
                 }
             }
