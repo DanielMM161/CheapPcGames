@@ -12,11 +12,9 @@ import com.dmm.cheappcgames.databinding.FragmentFilterBinding
 import com.dmm.cheappcgames.ui.DealsActivity
 import com.dmm.cheappcgames.ui.OffersViewModel
 
-class FragmentFilter : BaseFragment<FragmentFilterBinding>(
-    FragmentFilterBinding::inflate
-) {
+class FragmentFilter : BaseFragment<FragmentFilterBinding>(FragmentFilterBinding::inflate) {
 
-    lateinit var viewModel: OffersViewModel
+    private lateinit var viewModel: OffersViewModel
 
     override fun onViewCreated() {
         viewModel = (activity as DealsActivity).viewModel
