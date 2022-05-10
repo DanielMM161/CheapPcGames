@@ -12,24 +12,13 @@ import com.dmm.cheappcgames.databinding.FragmentFilterBinding
 import com.dmm.cheappcgames.ui.DealsActivity
 import com.dmm.cheappcgames.ui.OffersViewModel
 
-class FragmentFilter : Fragment() {
-
-    lateinit var _binding: FragmentFilterBinding
-    private val binding get() = _binding
+class FragmentFilter : BaseFragment<FragmentFilterBinding>(
+    FragmentFilterBinding::inflate
+) {
 
     lateinit var viewModel: OffersViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_filter, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentFilterBinding.bind(view)
+    override fun onViewCreated() {
         viewModel = (activity as DealsActivity).viewModel
         setGrid()
 
@@ -59,5 +48,4 @@ class FragmentFilter : Fragment() {
         }
         super.onAttach(context)
     }
-
 }
