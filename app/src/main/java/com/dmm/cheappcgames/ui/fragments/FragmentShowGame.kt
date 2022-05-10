@@ -15,10 +15,9 @@ import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.utils.Utils
 import com.google.android.material.snackbar.Snackbar
 
-class FragmentShowGame : Fragment(R.layout.fragment_show_game) {
-
-    private lateinit var _binding: FragmentShowGameBinding
-    private val binding get() = _binding
+class FragmentShowGame : BaseFragment<FragmentShowGameBinding>(
+    FragmentShowGameBinding::inflate
+) {
 
     private lateinit var viewModel: OffersViewModel
     private lateinit var gameDealersAdapter: GameDealersAdapter
@@ -27,9 +26,7 @@ class FragmentShowGame : Fragment(R.layout.fragment_show_game) {
 
     private val args: FragmentShowGameArgs by navArgs()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentShowGameBinding.bind(view)
+    override fun onViewCreated() {
         viewModel = (activity as DealsActivity).viewModel
         game = args.game
         mainDealer = game.deals.find { deal -> deal.storeID == game.storeId }!!
@@ -43,7 +40,7 @@ class FragmentShowGame : Fragment(R.layout.fragment_show_game) {
             val offerGame = viewModel.dealsGames.value?.data?.filter { item -> item.dealID.equals(mainDealer.dealID) }
             if(offerGame?.size!! > 0) {
                 viewModel.saveGame(offerGame[0])
-                Snackbar.make(view, "The game saved successfully", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "The game saved successfully", Snackbar.LENGTH_SHORT).show()
             }
         }
 
@@ -75,5 +72,7 @@ class FragmentShowGame : Fragment(R.layout.fragment_show_game) {
             Utils.showToast(requireContext(), "You're offline")
         }
     }
+
+
 
 }
