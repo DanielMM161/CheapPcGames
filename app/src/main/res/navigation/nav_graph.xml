@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_fragmentSearch_to_fragmentsOffers"
             app:destination="@id/fragmentsOffers" />
+        <action
+            android:id="@+id/action_fragmentSearch_to_fragmentShowGame"
+            app:destination="@id/fragmentShowGame" />
     </fragment>
     <fragment
         android:id="@+id/fragmentShowGame"

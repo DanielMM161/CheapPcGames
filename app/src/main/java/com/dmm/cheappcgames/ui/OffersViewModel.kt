@@ -25,6 +25,8 @@ class OffersViewModel(
     private val repository: OffersRepository
 ) : AndroidViewModel(app) {
 
+    lateinit var deals: StateFlow<Resource<List<Offer>>>
+
     private var _dealsGames = MutableStateFlow<Resource<List<Offer>>>(Resource.Loading())
     val dealsGames = _dealsGames.asStateFlow()
     var dealsPage = 0
@@ -72,7 +74,6 @@ class OffersViewModel(
             _dealsGamesSearch.value = Resource.Loading()
             val response = repository.getDealsByTitle(dealsPageSearch, searchText)
             _dealsGamesSearch.value = handleDealsGamesSearchResponse(response)
-            _dealsGamesSearch.value = Resource.Pause()
         } else {
             _dealsGamesSearch.value = Resource.ErrorCaught(resId = R.string.offline)
         }

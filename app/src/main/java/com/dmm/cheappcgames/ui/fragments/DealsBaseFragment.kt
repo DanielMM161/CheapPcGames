@@ -14,11 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.OffersAdapter
+import com.dmm.cheappcgames.data.Offer
 import com.dmm.cheappcgames.resource.Resource
 import com.dmm.cheappcgames.ui.DealsActivity
 import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.utils.Constants
 import com.dmm.cheappcgames.utils.Utils
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -50,36 +52,35 @@ abstract class DealsBaseFragment<VB: ViewBinding>(
         }
     }
 
-    private suspend fun subscribeObservableDeals() = viewModel.dealsGames.collect {
-        showProgressBar()
-        when(it) {
-            is Resource.Success -> {
-                it.data?.let { offers ->
-                    offersAdapter.differ.submitList(offers)
-                    //Temporal Solution
-                    offersAdapter.notifyItemRangeChanged(0, offers.size)
+    protected suspend fun subscribeObservableDeals()  {
+        viewModel.deals.collect {
+            when(it) {
+                is Resource.Success -> {
+                    it.data?.let { offers ->
+                        offersAdapter.differ.submitList(offers)
+                        //Temporal Solution
+                        offersAdapter.notifyItemRangeChanged(0, offers.size)
 
-                    val totalPages = offers.size / Constants.QUERY_PAGE_SIZE + 2
-                    isLastPage = viewModel.dealsPage == totalPages
+                        val totalPages = offers.size / Constants.QUERY_PAGE_SIZE + 2
+                        isLastPage = viewModel.dealsPage == totalPages
 
+                        hiddenProgressBar()
+                    }
+                }
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+                is Resource.Error -> {
                     hiddenProgressBar()
-
+                    it.message.let { message ->
+                        Utils.showToast(requireContext(), "An error occured: $message")
+                    }
                 }
-
-            }
-            is Resource.Loading -> {
-                showProgressBar()
-            }
-            is Resource.Error -> {
-                hiddenProgressBar()
-                it.message.let { message ->
-                    Utils.showToast(requireContext(), "An error occured: $message")
+                is Resource.ErrorCaught -> {
+                    hiddenProgressBar()
+                    val message = it.asString(requireContext())
+                    Utils.showToast(requireContext(), "$message")
                 }
-            }
-            is Resource.ErrorCaught -> {
-                hiddenProgressBar()
-                val message = it.asString(requireContext())
-                Utils.showToast(requireContext(), "$message")
             }
         }
     }
@@ -94,6 +95,7 @@ abstract class DealsBaseFragment<VB: ViewBinding>(
                             putSerializable("game", game)
                         }
                         findNavController().navigate(action, bundle)
+                        hiddenProgressBar()
                     }
                 }
                 is Resource.Loading -> {

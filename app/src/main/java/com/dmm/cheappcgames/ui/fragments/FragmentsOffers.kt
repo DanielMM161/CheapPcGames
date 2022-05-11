@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.OffersAdapter
+import com.dmm.cheappcgames.data.Offer
 import com.dmm.cheappcgames.databinding.FragmentOffersBinding
 import com.dmm.cheappcgames.resource.Resource
 import com.dmm.cheappcgames.ui.DealsActivity
 import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.utils.Constants.Companion.QUERY_PAGE_SIZE
 import com.dmm.cheappcgames.utils.Utils
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -31,6 +33,7 @@ class FragmentsOffers : DealsBaseFragment<FragmentOffersBinding>(
         super.onViewCreated()
         setUpRecyclerView(binding.rvOffers)
         showFilter()
+
     }
 
     private fun showFilter() {
@@ -48,5 +51,4 @@ class FragmentsOffers : DealsBaseFragment<FragmentOffersBinding>(
         binding.paginationProgressbar.visibility = View.VISIBLE
         isLoading = true
     }
-
 }

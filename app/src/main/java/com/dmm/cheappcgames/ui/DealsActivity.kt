@@ -70,6 +70,7 @@ class DealsActivity : AppCompatActivity() {
                     setTitleMateriaToolbar(R.string.fragment_offers)
                     onNextClicked.invoke()
                     setVisibilityMenuItem(true)
+                    viewModel.deals = viewModel.dealsGames
                 }
                 R.id.fragmentFavorites -> {
                     setTitleMateriaToolbar(R.string.fragment_favorites)
@@ -79,6 +80,7 @@ class DealsActivity : AppCompatActivity() {
                 R.id.fragmentSearch -> {
                     hiddeBottomNavigation()
                     viewModel.resetSearchResponse()
+                    viewModel.deals = viewModel.dealsGamesSearch
                 }
                 R.id.fragmentShowGame -> {
                     setTitleMateriaToolbar(R.string.fragment_show_game)
