@@ -36,4 +36,5 @@
 
     <!-- Error Message -->
     <string name="offline">No internet connection</string>
+    <string name="went_wrong">Something went wrong</string>
 </resources>

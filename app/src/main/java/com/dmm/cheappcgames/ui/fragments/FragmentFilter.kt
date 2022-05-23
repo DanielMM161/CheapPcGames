@@ -1,10 +1,7 @@
 package com.dmm.cheappcgames.ui.fragments
 
 import android.content.Context
-import android.os.Bundle
-import android.view.*
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.DistributorAdapter

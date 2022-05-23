@@ -37,6 +37,9 @@ class OffersViewModel(
     private var dealsPageSearch = 0
     private var dealsGamesResponseSearch: MutableList<Offer>? = null
 
+    private var _favoriteDeals = MutableStateFlow<Resource<List<Offer>>>(Resource.Loading())
+    val favoriteDeals = _favoriteDeals.asStateFlow()
+
     private var _gamesStores: List<StoreItem> = emptyList()
     val gamesStores get() = _gamesStores
 
@@ -133,7 +136,7 @@ class OffersViewModel(
         repository.deleteGame(game)
     }
 
-    fun getFavoritesGames() = repository.getFavoritesOffers()
+    fun getFavoritesDeals() = repository.getFavoritesOffers()
 
     private fun handleDealsGamesResponse(response: Response<List<Offer>>) : Resource<List<Offer>> {
         if(response.isSuccessful) {
