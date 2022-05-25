@@ -22,44 +22,37 @@
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/logo"
+            android:id="@+id/store_logo"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
             app:imageUrl="@{constants.BASE_URL_LOGO+store.images.logo}" />
 
         <TextView
-            android:id="@+id/deal_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="20dp"
-            android:layout_toStartOf="@+id/price"
-            android:layout_toEndOf="@+id/logo"
+            android:id="@+id/store_name"
             style="@style/OthersDealers"
-            tools:text="Dealer Name"
-            android:text="@{store.storeName}"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/store_logo"
+            android:text="@{store.storeName}"
+            tools:text="Dealer Name" />
 
         <TextView
-            android:id="@+id/price"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:background="@color/black"
-            android:gravity="center"
-            android:text="@{`$`+deal.price}"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            tools:text="0.88$" />
+            android:id="@+id/store_price"
+            style="@style/Discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/store_name"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/store_logo"
+            android:text="@{deal.price.equals(`0.00`) ? @string/free_game : `$`+deal.price}"
+            tools:text="17.60" />
 
     </RelativeLayout>
 </layout>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Button Distributor -->
-    <style name="ButtonDistributor" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="backgroundTint">@color/state_distributor</item>
+    <!-- Button See Store -->
+    <style name="ButtonStore" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">?attr/colorPrimaryVariant</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
@@ -24,8 +24,8 @@
     <!-- Text Dealers Style -->
     <style name="OthersDealers" parent="Widget.MaterialComponents.TextView">
         <item name="android:textStyle">bold</item>
-        <item name="android:textAlignment">center</item>
         <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <!-- Main Dealer Style -->
@@ -43,7 +43,7 @@
 
     <!-- Text Discount Style -->
     <style name="Discount" parent="">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">?attr/colorPrimaryVariant</item>
         <item name="android:textStyle">bold</item>
     </style>
 

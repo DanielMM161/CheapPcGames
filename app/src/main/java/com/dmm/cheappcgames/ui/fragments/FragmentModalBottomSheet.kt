@@ -1,28 +1,29 @@
 package com.dmm.cheappcgames.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dmm.cheappcgames.R
-import com.dmm.cheappcgames.adapters.GameDealersAdapter
+import com.dmm.cheappcgames.adapters.GamesStoresAdapter
 import com.dmm.cheappcgames.data.Deal
 import com.dmm.cheappcgames.data.GameItem
-import com.dmm.cheappcgames.databinding.FragmentShowGameBinding
+import com.dmm.cheappcgames.databinding.FragmentModalBottomSheetBinding
 import com.dmm.cheappcgames.ui.DealsActivity
 import com.dmm.cheappcgames.ui.OffersViewModel
 import com.dmm.cheappcgames.utils.Utils
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 
-class FragmentShowGame(private val gameItem: GameItem) : DialogFragment() {
+class FragmentModalBottomSheet(private val gameItem: GameItem) : BottomSheetDialogFragment() {
 
-    private lateinit var _binding : FragmentShowGameBinding
+    private lateinit var _binding : FragmentModalBottomSheetBinding
     private val binding get() = _binding
 
     private lateinit var viewModel: OffersViewModel
-    private lateinit var gameDealersAdapter: GameDealersAdapter
+    private lateinit var gameStoresAdapter: GamesStoresAdapter
     private lateinit var game: GameItem
     private lateinit var mainDealer: Deal
 
@@ -31,7 +32,7 @@ class FragmentShowGame(private val gameItem: GameItem) : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_show_game, container, false)
+        return inflater.inflate(R.layout.fragment_modal_bottom_sheet, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,7 +40,7 @@ class FragmentShowGame(private val gameItem: GameItem) : DialogFragment() {
         viewModel = (activity as DealsActivity).viewModel
         game = gameItem
         mainDealer = game.deals.find { deal -> deal.storeID == game.storeId }!!
-        _binding = FragmentShowGameBinding.bind(view)
+        _binding = FragmentModalBottomSheetBinding.bind(view)
         setupListView()
 
         binding.infoGame = game.info
@@ -54,22 +55,23 @@ class FragmentShowGame(private val gameItem: GameItem) : DialogFragment() {
             }
         }
 
-        binding.mainDealerLayout.setOnClickListener {
-            goFragmentDealWebview(mainDealer.dealID)
+        binding.close.setOnClickListener {
+            dismiss()
         }
     }
 
     private fun setupListView() {
-        binding.dealers.apply {
+        binding.rvStores.apply {
             val othersDealers = game.deals.filter { deal -> deal.storeID != mainDealer.storeID }
-            gameDealersAdapter = GameDealersAdapter(requireContext(), othersDealers)
-            adapter = gameDealersAdapter
+            gameStoresAdapter = GamesStoresAdapter(othersDealers)
+            adapter = gameStoresAdapter
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
         itemClickListener()
     }
 
-    private fun itemClickListener() = gameDealersAdapter.setOnItemClickListener {
-        goFragmentDealWebview(it)
+    private fun itemClickListener() = gameStoresAdapter.setOnItemClickListener {
+
     }
 
     private fun goFragmentDealWebview(dealId: String) {
@@ -78,7 +80,7 @@ class FragmentShowGame(private val gameItem: GameItem) : DialogFragment() {
                 putString("dealId", dealId)
             }
 
-           findNavController().navigate(R.id.action_fragmentShowGame_to_fragmentDealWebview, bundle)
+          //  findNavController().navigate(R.id.action_fragmentShowGame_to_fragmentDealWebview, bundle)
         } else {
             Utils.showToast(requireContext(), "You're offline")
         }

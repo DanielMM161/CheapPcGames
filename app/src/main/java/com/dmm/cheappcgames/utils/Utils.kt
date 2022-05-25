@@ -1,14 +1,11 @@
 package com.dmm.cheappcgames.utils
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import com.dmm.cheappcgames.adapters.OffersAdapter
 import com.dmm.cheappcgames.resource.Resource
 import com.dmm.cheappcgames.ui.OffersViewModel
-import com.dmm.cheappcgames.ui.fragments.FragmentShowGame
+import com.dmm.cheappcgames.ui.fragments.FragmentModalBottomSheet
 import kotlinx.coroutines.flow.collect
 
 class Utils {
@@ -30,8 +27,8 @@ class Utils {
                     is Resource.Success -> {
                         it.data?.let { game ->
                             hiddenProgressBar
-                            var dialogFragment = FragmentShowGame(game)
-                            dialogFragment.show(transaction, "showGame")
+                            var dialogFragment = FragmentModalBottomSheet(game)
+                            dialogFragment.show(transaction, "fragment_modal")
                         }
                         hiddenProgressBar
                     }

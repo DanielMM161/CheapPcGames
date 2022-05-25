@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="8dp" >
 
         <ImageView
             android:id="@+id/image"
@@ -52,8 +52,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/name"
                     android:layout_alignParentStart="true"
-                    android:textSize="12sp"
                     android:text="@{offer.storeItem.storeName}"
+                    android:textSize="12sp"
                     tools:text="Store Name" />
 
                 <ImageView
@@ -72,10 +72,9 @@
                     textNormalPrice="@{offer.normalPrice}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/store_name"
-                    android:layout_marginTop="8dp"
+                    android:layout_below="@+id/discount_price"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginEnd="8dp"
-                    android:layout_toStartOf="@+id/discount"
                     tools:text="15$" />
 
                 <TextView
@@ -83,28 +82,12 @@
                     style="@style/Discount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/normal_price"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="8dp"
-                    android:layout_toStartOf="@+id/discount"
-                    android:text="@{offer.salePrice.equals(`0.00`) ? @string/free_game : `$`+offer.salePrice}"
-                    tools:text="8$" />
-
-                <TextView
-                    android:id="@+id/discount"
-                    android:layout_width="60dp"
-                    android:layout_height="30dp"
                     android:layout_below="@+id/store_name"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:background="@color/red"
-                    style="@style/Discount"
-                    android:gravity="center"
-                    textSaving="@{offer.savings}"
-                    tools:text="91%" />
-
+                    android:text="@{offer.salePrice.equals(`0.00`) ? @string/free_game : `$`+offer.salePrice}"
+                    tools:text="8$" />
         </RelativeLayout>
     </LinearLayout>
 
