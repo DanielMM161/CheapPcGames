@@ -24,8 +24,6 @@ abstract class BaseFragment<VB: ViewBinding>(
     ): View? {
         _binding = bindingInflater.invoke(inflater)
 
-        if(_binding == null) { throw IllegalArgumentException("Binding null") }
-
         return binding.root
     }
 

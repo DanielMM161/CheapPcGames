@@ -13,7 +13,7 @@
             android:id="@+id/bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:liftOnScroll="true">
+            app:liftOnScroll="false">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/material_toolbar"
@@ -40,6 +40,8 @@
             app:layout_anchorGravity="bottom"
             app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
             app:layout_anchor="@id/nav_host_fragment"
+            app:itemIconTint="@color/button_navigation_icon"
+            app:itemTextColor="@color/button_navigation_icon"
             app:menu="@menu/bottom_navigation_menu"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
