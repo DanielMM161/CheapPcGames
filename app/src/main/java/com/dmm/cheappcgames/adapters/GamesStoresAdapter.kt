@@ -15,7 +15,7 @@ class GamesStoresAdapter(val gameDealers: List<Deal>): RecyclerView.Adapter<Game
             binding.store = storeItem
 
             binding.relativeLayout.setOnClickListener {
-                onItemClickListener?.let { deal?.dealID?.let { it1 -> it(it1) } }
+                onItemClickListener?.let { deal.dealID.let { it1 -> it(it1) } }
             }
         }
     }
@@ -27,7 +27,7 @@ class GamesStoresAdapter(val gameDealers: List<Deal>): RecyclerView.Adapter<Game
 
     override fun onBindViewHolder(holder: GamesStoresViewHolder, position: Int) {
         val deal: Deal = gameDealers.get(position)
-        deal?.storeItem.let {
+        deal.storeItem.let {
             holder.bind(deal,it)
         }
     }

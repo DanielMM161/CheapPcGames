@@ -46,6 +46,5 @@
             android:visibility="invisible" />
 
     </RelativeLayout>
-
 </layout>
 

@@ -64,11 +64,11 @@
 
             <ImageView
                 android:id="@+id/logo_main_store"
+                imageUrl="@{constants.BASE_URL_LOGO+mainStoreItem.images.logo}"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_below="@id/discount"
                 android:layout_alignParentEnd="true"
-                imageUrl="@{constants.BASE_URL_LOGO+mainStoreItem.images.logo}"
                 android:layout_marginTop="8dp" />
 
             <TextView
@@ -83,6 +83,7 @@
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:text="@{infoGame.title}"
+                android:textColor="@color/black"
                 android:textAppearance="?attr/textAppearanceHeadline4"
                 tools:text="Dragon Ball Z Figther" />
 
@@ -96,14 +97,16 @@
                 android:layout_marginTop="8dp" />
 
             <com.google.android.material.button.MaterialButton
-                style="@style/ButtonStore"
+                android:id="@+id/button_store"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rv_stores"
-                android:layout_alignParentEnd="true"
                 android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="16dp"
-                android:text="asd" />
+                android:backgroundTint="?attr/colorPrimaryVariant"
+                android:textColor="@color/white"
+                android:text="@string/see_in_web" />
 
         </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

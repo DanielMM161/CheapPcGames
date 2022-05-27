@@ -35,12 +35,14 @@
 
         <TextView
             android:id="@+id/store_name"
-            style="@style/OthersDealers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/store_logo"
             android:text="@{store.storeName}"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             tools:text="Dealer Name" />
 
         <TextView
