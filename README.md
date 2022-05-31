@@ -1,4 +1,7 @@
 # Cheap Pc Games
+Cheap Pc Games is a modern Android Application that show the different deals about computer games from different stores where you can save
+a specific deal to show later also you can search a specific video game or filter for specific stores.
+
 In this project I developed modern Android Development with:
  - MVVM architecture
  - Kotlin Coroutines
@@ -12,7 +15,7 @@ In this project I developed modern Android Development with:
 
 ## 📷 Previews
 
- <p align="center">
+<p align="center">
  <img src="previews/CheapPcGame.gif" alt="drawing" width="270" />
  <img src="previews/Cpg-1.png" alt="drawing" width="270" />
  <img src="previews/Cpg-2.png" alt="drawing" width="270" />
@@ -20,11 +23,9 @@ In this project I developed modern Android Development with:
  <img src="previews/Cpg-4.png" alt="drawing" width="270" />
  <img src="previews/Cpg-5.png" alt="drawing" width="270" />
  <img src="previews/Cpg-6.png" alt="drawing" width="270" />
- <img src="previews/Cpg-7.png" alt="drawing" width="270" />
- <img src="previews/Cpg-8.png" alt="drawing" width="270" />
- </p>
+</p>
 
-## Architecture
+## 🏛️ Architecture
 Cheap Pc Games is based on the MVVM architecture and the Repository pattern.
 ![architecture](https://user-images.githubusercontent.com/24237865/77502018-f7d36000-6e9c-11ea-92b0-1097240c8689.png)
 
@@ -37,7 +38,7 @@ Cheap Pc Games using the [CheapSharkApi](https://apidocs.cheapshark.com/)
 
 They offer a fully documented public API for developers to use CheapShark pricing data on their own app or website.
 
-## Tech stack & Open-source libraries
+## 🛠 Tech stack & Open-source libraries
 - Minimum SDK level 21
 - [Kotlin](https://kotlinlang.org/), [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/) for asynchronous.
 - Jetpack
@@ -51,3 +52,7 @@ They offer a fully documented public API for developers to use CheapShark pricin
 - [Retrofit2 & OkHttp3](https://github.com/square/retrofit) - Construct the REST APIs.
 - [Coil](https://github.com/coil-kt/coil) - Loading images from network
 - [Gson](https://github.com/google/gson) - Java library that can be used to convert Java/Kotlin Objects into their JSON representation
+
+## 💯 MAD Score
+ <img src="madscores/summary.png"/>
+ <img src="madscores/kotlin.png"/>
