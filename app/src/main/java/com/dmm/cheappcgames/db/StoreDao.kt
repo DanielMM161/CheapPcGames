@@ -3,6 +3,8 @@ package com.dmm.cheappcgames.db
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.dmm.cheappcgames.data.Offer
+import com.dmm.cheappcgames.resource.Resource
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface StoreDao {
@@ -14,6 +16,6 @@ interface StoreDao {
     suspend fun deleteGame(game: Offer)
 
     @Query("SELECT * FROM offers")
-    fun getFavoritesOffers(): LiveData<List<Offer>>
+    fun getFavoritesOffers(): Flow<List<Offer>>
 
 }

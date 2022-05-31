@@ -1,10 +1,11 @@
 package com.dmm.cheappcgames.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -14,8 +15,9 @@ import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.databinding.ActivityMainBinding
 import com.dmm.cheappcgames.db.CheapPcDataBase
 import com.dmm.cheappcgames.repository.OffersRepository
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.Job
+
 
 class DealsActivity : AppCompatActivity() {
 
@@ -64,12 +66,13 @@ class DealsActivity : AppCompatActivity() {
                 R.id.fragmentFilter -> {
                     setTitleMateriaToolbar(R.string.fragment_filter)
                     setVisibilityMenuItem(false)
-                    binding.materialToolbar.collapseActionView()
+                    slideUpBottomNavigation()
                 }
                 R.id.fragmentsOffers -> {
                     setTitleMateriaToolbar(R.string.fragment_offers)
                     onNextClicked.invoke()
                     setVisibilityMenuItem(true)
+                    viewModel.deals = viewModel.dealsGames
                 }
                 R.id.fragmentFavorites -> {
                     setTitleMateriaToolbar(R.string.fragment_favorites)
@@ -79,15 +82,7 @@ class DealsActivity : AppCompatActivity() {
                 R.id.fragmentSearch -> {
                     hiddeBottomNavigation()
                     viewModel.resetSearchResponse()
-                }
-                R.id.fragmentShowGame -> {
-                    setTitleMateriaToolbar(R.string.fragment_show_game)
-                    hiddeBottomNavigation()
-                    setVisibilityMenuItem(false)
-                }
-                R.id.fragmentDealWebview -> {
-                    setTitleMateriaToolbar(R.string.fragment_webview)
-                    hiddeBottomNavigation()
+                    viewModel.deals = viewModel.dealsGamesSearch
                 }
             }
         }
@@ -95,6 +90,12 @@ class DealsActivity : AppCompatActivity() {
 
     private fun setTitleMateriaToolbar(resId: Int) {
         binding.materialToolbar.title = getString(resId)
+    }
+
+    private fun slideUpBottomNavigation() {
+        val behavior = (bottomNavigation.layoutParams as CoordinatorLayout.LayoutParams).behavior
+        val hideShowBehavior = behavior as HideBottomViewOnScrollBehavior<BottomNavigationView>
+        hideShowBehavior.slideUp(bottomNavigation)
     }
 
     private fun showBottomNavigation() {
@@ -132,7 +133,6 @@ class DealsActivity : AppCompatActivity() {
                 navController.navigate(R.id.action_fragmentsOffers_to_fragmentSearch)
                 return false
             }
-
         })
 
         menuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
@@ -144,7 +144,6 @@ class DealsActivity : AppCompatActivity() {
                 navController.navigate(R.id.action_fragmentSearch_to_fragmentsOffers)
                 return true
             }
-
         })
     }
 

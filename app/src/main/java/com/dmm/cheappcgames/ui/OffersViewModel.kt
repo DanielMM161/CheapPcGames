@@ -25,6 +25,8 @@ class OffersViewModel(
     private val repository: OffersRepository
 ) : AndroidViewModel(app) {
 
+    lateinit var deals: StateFlow<Resource<List<Offer>>>
+
     private var _dealsGames = MutableStateFlow<Resource<List<Offer>>>(Resource.Loading())
     val dealsGames = _dealsGames.asStateFlow()
     var dealsPage = 0
@@ -34,6 +36,9 @@ class OffersViewModel(
     val dealsGamesSearch = _dealsGamesSearch.asStateFlow()
     private var dealsPageSearch = 0
     private var dealsGamesResponseSearch: MutableList<Offer>? = null
+
+    private var _favoriteDeals = MutableStateFlow<Resource<List<Offer>>>(Resource.Loading())
+    val favoriteDeals = _favoriteDeals.asStateFlow()
 
     private var _gamesStores: List<StoreItem> = emptyList()
     val gamesStores get() = _gamesStores
@@ -72,7 +77,6 @@ class OffersViewModel(
             _dealsGamesSearch.value = Resource.Loading()
             val response = repository.getDealsByTitle(dealsPageSearch, searchText)
             _dealsGamesSearch.value = handleDealsGamesSearchResponse(response)
-            _dealsGamesSearch.value = Resource.Pause()
         } else {
             _dealsGamesSearch.value = Resource.ErrorCaught(resId = R.string.offline)
         }
@@ -132,7 +136,7 @@ class OffersViewModel(
         repository.deleteGame(game)
     }
 
-    fun getFavoritesGames() = repository.getFavoritesOffers()
+    fun getFavoritesDeals() = repository.getFavoritesOffers()
 
     private fun handleDealsGamesResponse(response: Response<List<Offer>>) : Resource<List<Offer>> {
         if(response.isSuccessful) {

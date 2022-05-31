@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!--When Button is in selected state -->
-    <item android:state_selected="true" android:color="?attr/colorPrimary" />
+    <item android:state_selected="true" android:color="#7A8A8A8A" />
     <item android:state_selected="false" android:color="@android:color/white" />
     <!--Default Background Color -->
     <item android:color="@android:color/white" />

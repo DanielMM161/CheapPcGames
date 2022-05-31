@@ -32,8 +32,8 @@ class DistributorAdapter(val stores: List<StoreItem>, val viewModel: OffersViewM
         binding.store = item
         binding.viewModel = viewModel
 
-        if(viewModel.storesSelectedList.contains(item.storeID.toString())) {
-            binding.button.isSelected = true
+        if(viewModel.storesSelectedList.contains(item.storeID)) {
+            binding.storeLayout.isSelected = true
         }
         return binding.root
     }

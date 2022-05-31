@@ -20,8 +20,9 @@
     <string name="delete_game">%s was delete</string>
     <string name="undo">Undo</string>
 
-    <!-- Fragment Show Game -->
-    <string name="others_dealers">Others Dealers</string>
+    <!-- Fragment Modal Bottom -->
+    <string name="see_in_web">See Deal In Web Page</string>
+    <string name="save_game">Added to favorite list</string>
 
     <!-- Fragment Favorites -->
     <string name="empty_favorite_list_title">Build a Favorite List</string>
@@ -36,4 +37,5 @@
 
     <!-- Error Message -->
     <string name="offline">No internet connection</string>
+    <string name="went_wrong">Something went wrong</string>
 </resources>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <import type="java.util.List"/>
+
+        <variable
+            name="constants"
+            type="com.dmm.cheappcgames.utils.Constants" />
+
+        <variable
+            name="deal"
+            type="com.dmm.cheappcgames.data.Deal" />
+
+        <variable
+            name="store"
+            type="com.dmm.cheappcgames.data.StoreItem" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/store_logo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:imageUrl="@{constants.BASE_URL_LOGO+store.images.logo}" />
+
+        <TextView
+            android:id="@+id/store_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/store_logo"
+            android:text="@{store.storeName}"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            tools:text="Dealer Name" />
+
+        <TextView
+            android:id="@+id/store_price"
+            style="@style/Discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/store_name"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/store_logo"
+            android:text="@{deal.price.equals(`0.00`) ? @string/free_game : `$`+deal.price}"
+            tools:text="17.60" />
+
+    </RelativeLayout>
+</layout>

@@ -1,10 +1,7 @@
 package com.dmm.cheappcgames.ui.fragments
 
 import android.content.Context
-import android.os.Bundle
-import android.view.*
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.dmm.cheappcgames.R
 import com.dmm.cheappcgames.adapters.DistributorAdapter
@@ -12,24 +9,11 @@ import com.dmm.cheappcgames.databinding.FragmentFilterBinding
 import com.dmm.cheappcgames.ui.DealsActivity
 import com.dmm.cheappcgames.ui.OffersViewModel
 
-class FragmentFilter : Fragment() {
+class FragmentFilter : BaseFragment<FragmentFilterBinding>(FragmentFilterBinding::inflate) {
 
-    lateinit var _binding: FragmentFilterBinding
-    private val binding get() = _binding
+    private lateinit var viewModel: OffersViewModel
 
-    lateinit var viewModel: OffersViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_filter, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentFilterBinding.bind(view)
+    override fun onViewCreated() {
         viewModel = (activity as DealsActivity).viewModel
         setGrid()
 
@@ -59,5 +43,4 @@ class FragmentFilter : Fragment() {
         }
         super.onAttach(context)
     }
-
 }

@@ -15,20 +15,57 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:clickable="true"
+        android:background="@color/state_distributor"
+        android:onClick="@{ view -> viewModel.handleOnClickMaterial(view, store)}">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="100dp"
-            app:layout_constraintStart_toStartOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/store_layout"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:clickable="true"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Distributor"
-            android:text="@{store.storeName}"
-            android:onClick="@{ view -> viewModel.handleOnClickMaterial(view, store)}"
-            style="@style/ButtonDistributor"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@color/state_distributor"
+            android:onClick="@{ view -> viewModel.handleOnClickMaterial(view, store)}" >
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:scaleType="centerInside"
+                app:logoUrl="@{store.images.logo}" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:text="@{store.storeName}"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/logo"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Steam" />
+
+            <View
+                style="@style/Divider"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </layout>
